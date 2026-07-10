@@ -10,10 +10,18 @@
 -- ============================================================================
 
 -- ---- Demo instructor (auth user → profile created by handle_new_user trigger)
+--
+-- NOTE: manually seeding a Supabase auth user is version-sensitive. Two things
+-- are required for email/password sign-in to actually work, beyond the row
+-- itself: (1) the token columns must be empty strings (NOT NULL — GoTrue scans
+-- them into Go strings and errors on NULL), and (2) a matching auth.identities
+-- row for the "email" provider. Both are handled below, and the ON CONFLICT
+-- clauses repair a previously-seeded (broken) row when you re-run this file.
 insert into auth.users (
   id, instance_id, aud, role, email, encrypted_password,
   email_confirmed_at, created_at, updated_at,
-  raw_app_meta_data, raw_user_meta_data
+  raw_app_meta_data, raw_user_meta_data,
+  confirmation_token, recovery_token, email_change, email_change_token_new
 ) values (
   '00000000-0000-0000-0000-000000000001',
   '00000000-0000-0000-0000-000000000000',
@@ -21,9 +29,29 @@ insert into auth.users (
   crypt('Password123!', gen_salt('bf')),
   now(), now(), now(),
   '{"provider":"email","providers":["email"]}',
-  '{"full_name":"Dr. Ada Mensah","role":"instructor"}'
+  '{"full_name":"Dr. Ada Mensah","role":"instructor"}',
+  '', '', '', ''
 )
-on conflict (id) do nothing;
+on conflict (id) do update set
+  encrypted_password    = excluded.encrypted_password,
+  email_confirmed_at    = excluded.email_confirmed_at,
+  confirmation_token    = '',
+  recovery_token        = '',
+  email_change          = '',
+  email_change_token_new = '';
+
+-- Matching identity for the email provider (required by modern GoTrue).
+insert into auth.identities (
+  id, provider_id, user_id, identity_data, provider,
+  last_sign_in_at, created_at, updated_at
+) values (
+  gen_random_uuid(),
+  '00000000-0000-0000-0000-000000000001',
+  '00000000-0000-0000-0000-000000000001',
+  '{"sub":"00000000-0000-0000-0000-000000000001","email":"instructor@dmaths.io","email_verified":true,"phone_verified":false}',
+  'email', now(), now(), now()
+)
+on conflict (provider_id, provider) do nothing;
 
 -- Enrich the auto-created profile + instructor profile.
 update public.profiles
