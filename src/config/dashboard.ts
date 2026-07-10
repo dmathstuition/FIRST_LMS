@@ -21,8 +21,14 @@ export interface DashboardNavItem {
   exact?: boolean;
 }
 
+/** A titled group of nav entries. */
+export interface DashboardNavGroup {
+  heading: string;
+  items: DashboardNavItem[];
+}
+
 /** Student dashboard sidebar navigation, grouped into sections. */
-export const studentNav: { heading: string; items: DashboardNavItem[] }[] = [
+export const studentNav: DashboardNavGroup[] = [
   {
     heading: "Learn",
     items: [

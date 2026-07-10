@@ -10,7 +10,24 @@ import {
   browseCoursesLink,
   type DashboardNavItem,
 } from "@/config/dashboard";
+import { instructorNav, switchToLearningLink } from "@/config/instructor";
 import { cn } from "@/lib/utils";
+
+export type DashboardVariant = "student" | "instructor";
+
+/**
+ * Resolve nav + footer link for a variant.
+ *
+ * IMPORTANT: the nav configs contain lucide icon *components* (functions), which
+ * are not serializable and therefore cannot be passed from a Server Component to
+ * a Client Component as props. So this client component imports the configs
+ * directly and selects by a serializable `variant` string.
+ */
+function resolveNav(variant: DashboardVariant) {
+  return variant === "instructor"
+    ? { nav: instructorNav, footerLink: switchToLearningLink }
+    : { nav: studentNav, footerLink: browseCoursesLink };
+}
 
 /** Determine whether a nav item is the active route. */
 function isActive(pathname: string, item: DashboardNavItem) {
@@ -18,31 +35,43 @@ function isActive(pathname: string, item: DashboardNavItem) {
 }
 
 /**
- * Dashboard sidebar contents (nav groups + browse link). Rendered both in the
- * fixed desktop rail and inside the mobile drawer, so it takes no layout props.
+ * Generic dashboard sidebar contents (nav groups + a highlighted footer link).
+ * Rendered in the fixed desktop rail and inside the mobile drawer, for both the
+ * student and instructor areas — selected by the `variant` prop.
  */
-export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
+export function SidebarContent({
+  variant,
+  label,
+  onNavigate,
+}: {
+  variant: DashboardVariant;
+  /** Small badge under the brand, e.g. "Instructor". */
+  label?: string;
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
+  const { nav, footerLink } = resolveNav(variant);
 
   return (
     <div className="flex h-full flex-col">
       {/* Brand */}
       <div className="flex h-16 items-center gap-2 px-5 font-semibold">
-        <Link
-          href="/"
-          className="flex items-center gap-2"
-          onClick={onNavigate}
-        >
+        <Link href="/" className="flex items-center gap-2" onClick={onNavigate}>
           <span className="flex size-9 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-sm">
             <GraduationCap className="size-5" />
           </span>
           <span className="text-sm">{siteConfig.shortName}</span>
         </Link>
+        {label && (
+          <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
+            {label}
+          </span>
+        )}
       </div>
 
       {/* Nav groups */}
       <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-4 scrollbar-thin">
-        {studentNav.map((group) => (
+        {nav.map((group) => (
           <div key={group.heading}>
             <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {group.heading}
@@ -74,15 +103,15 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         ))}
       </nav>
 
-      {/* Footer: browse courses */}
+      {/* Footer link */}
       <div className="border-t p-3">
         <Link
-          href={browseCoursesLink.href}
+          href={footerLink.href}
           onClick={onNavigate}
           className="flex items-center gap-3 rounded-lg bg-brand-gradient px-3 py-2.5 text-sm font-medium text-white shadow-sm transition-transform hover:scale-[1.01]"
         >
-          <browseCoursesLink.icon className="size-[18px] shrink-0" />
-          {browseCoursesLink.title}
+          <footerLink.icon className="size-[18px] shrink-0" />
+          {footerLink.title}
         </Link>
       </div>
     </div>

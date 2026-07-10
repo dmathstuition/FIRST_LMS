@@ -2,11 +2,21 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, Search, Bell, LogOut, User, Settings } from "lucide-react";
+import {
+  Menu,
+  Search,
+  Bell,
+  LogOut,
+  User,
+  Settings,
+  GraduationCap,
+  Shield,
+} from "lucide-react";
 
 import { cn, getInitials } from "@/lib/utils";
 import { signOut } from "@/features/auth/actions";
 import type { SessionUser } from "@/lib/auth";
+import type { DashboardVariant } from "./sidebar";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -34,9 +44,15 @@ import { SidebarContent } from "./sidebar";
 export function Topbar({
   user,
   unreadCount = 0,
+  variant = "student",
+  sidebarLabel,
+  searchPlaceholder = "Search your courses…",
 }: {
   user: SessionUser;
   unreadCount?: number;
+  variant?: DashboardVariant;
+  sidebarLabel?: string;
+  searchPlaceholder?: string;
 }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -59,7 +75,11 @@ export function Topbar({
           className="left-0 top-0 h-dvh max-w-[16rem] translate-x-0 translate-y-0 rounded-none rounded-r-2xl p-0 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left"
         >
           <DialogTitle className="sr-only">Navigation</DialogTitle>
-          <SidebarContent onNavigate={() => setMobileOpen(false)} />
+          <SidebarContent
+            variant={variant}
+            label={sidebarLabel}
+            onNavigate={() => setMobileOpen(false)}
+          />
         </DialogContent>
       </Dialog>
 
@@ -68,7 +88,7 @@ export function Topbar({
         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <input
           type="search"
-          placeholder="Search your courses…"
+          placeholder={searchPlaceholder}
           aria-label="Search"
           className="h-10 w-full rounded-lg border border-input bg-muted/40 pl-9 pr-3 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring"
         />
@@ -123,6 +143,20 @@ export function Topbar({
               </Badge>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            {(user.role === "instructor" || user.role === "admin") && (
+              <DropdownMenuItem asChild>
+                <Link href="/instructor">
+                  <GraduationCap /> Instructor panel
+                </Link>
+              </DropdownMenuItem>
+            )}
+            {user.role === "admin" && (
+              <DropdownMenuItem asChild>
+                <Link href="/admin">
+                  <Shield /> Admin panel
+                </Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem asChild>
               <Link href="/dashboard/settings">
                 <User /> Profile
