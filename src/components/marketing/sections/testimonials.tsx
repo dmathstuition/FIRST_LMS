@@ -13,7 +13,7 @@ const testimonials: Testimonial[] = [
     role: "Engineering Student",
     avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=128&fit=crop&crop=faces",
     quote:
-      "DMATHS didn't just teach me formulas — it gave me the intuition to actually understand. I finally get calculus.",
+      "D-MATHS didn't just teach me formulas — it gave me the intuition to actually understand. I finally get calculus.",
     rating: 5,
   },
   {
@@ -49,7 +49,7 @@ const testimonials: Testimonial[] = [
     role: "Self-taught Programmer",
     avatarUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=128&h=128&fit=crop&crop=faces",
     quote:
-      "I've tried every platform out there. Nothing comes close to how clearly DMATHS explains hard concepts.",
+      "I've tried every platform out there. Nothing comes close to how clearly D-MATHS explains hard concepts.",
     rating: 5,
   },
   {
@@ -58,7 +58,7 @@ const testimonials: Testimonial[] = [
     role: "High School Teacher",
     avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=128&h=128&fit=crop&crop=faces",
     quote:
-      "I now recommend DMATHS to all my students. The SAT prep alone raised their scores dramatically.",
+      "I now recommend D-MATHS to all my students. The SAT prep alone raised their scores dramatically.",
     rating: 5,
   },
 ];

@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 /**
- * Design tokens for DMATHS Learning Hub.
+ * Design tokens for D-MATHS Learning Hub.
  *
  * All colors are expressed as HSL channels so Tailwind's `hsl(var(--token))`
  * pattern and shadcn/ui semantic naming resolve against one source of truth.
- * Brand: primary #2563EB, dark #0F172A, accent #14B8A6.
+ * Brand: primary #2563EB, dark #0F172A, accent #F97316 (D-MATHS orange).
  */
 @layer base {
   :root {
@@ -29,7 +29,7 @@
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 172 82% 40%; /* #14B8A6 */
+    --accent: 24 95% 53%; /* #F97316 — D-MATHS orange */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -61,7 +61,7 @@
     --muted: 217 33% 20%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 172 66% 50%;
+    --accent: 24 95% 56%; /* orange, slightly lighter for dark surfaces */
     --accent-foreground: 222 47% 11%;
 
     --destructive: 0 63% 50%;
@@ -116,9 +116,9 @@
   .animated-gradient {
     background: linear-gradient(
       120deg,
-      #2563eb,
       #1d4ed8,
-      #14b8a6,
+      #2563eb,
+      #1e3a8a,
       #2563eb
     );
     background-size: 300% 300%;

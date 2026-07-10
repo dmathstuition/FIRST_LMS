@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
-// Dynamically generated favicon — a brand-gradient "D" tile. Avoids shipping a
-// binary .ico and stays on-brand.
+// Dynamically generated favicon — the D-MATHS ring-and-stroke mark on a royal
+// blue tile. Keeps the browser tab on-brand without shipping a binary .ico.
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
@@ -10,19 +10,24 @@ export default function Icon() {
     (
       <div
         style={{
-          fontSize: 22,
-          fontWeight: 700,
-          color: "white",
           width: "100%",
           height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #2563EB 0%, #14B8A6 100%)",
+          background: "linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)",
           borderRadius: 7,
         }}
       >
-        D
+        <svg width="22" height="22" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="15" stroke="white" strokeWidth="6" />
+          <path
+            d="M13 34 L35 14"
+            stroke="#F97316"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+        </svg>
       </div>
     ),
     { ...size },

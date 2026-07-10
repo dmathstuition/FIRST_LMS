@@ -6,7 +6,7 @@ import { ForgotPasswordForm } from "@/features/auth/components/forgot-password-f
 
 export const metadata: Metadata = {
   title: "Reset your password",
-  description: "Request a password reset link for your DMATHS account.",
+  description: "Request a password reset link for your D-MATHS account.",
 };
 
 export default async function ForgotPasswordPage({

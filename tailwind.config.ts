@@ -69,6 +69,12 @@ const config: Config = {
           600: "#1d4ed8",
           900: "#0f172a",
         },
+        // D-MATHS orange accent (raw values for gradients/decoration).
+        dmorange: {
+          400: "#fb923c",
+          500: "#f97316",
+          600: "#ea580c",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -78,10 +84,12 @@ const config: Config = {
         "2xl": "calc(var(--radius) + 8px)",
       },
       backgroundImage: {
+        // Primary brand gradient — royal blue (used on buttons, brand tiles).
         "brand-gradient":
-          "linear-gradient(135deg, #2563eb 0%, #14b8a6 100%)",
+          "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
+        // Ambient hero glow — blue with a warm orange edge to echo the logo.
         "brand-radial":
-          "radial-gradient(60% 60% at 50% 0%, rgba(37,99,235,0.18) 0%, rgba(20,184,166,0.06) 60%, transparent 100%)",
+          "radial-gradient(60% 60% at 50% 0%, rgba(37,99,235,0.18) 0%, rgba(249,115,22,0.08) 60%, transparent 100%)",
       },
       keyframes: {
         "accordion-down": {

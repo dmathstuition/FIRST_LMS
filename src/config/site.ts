@@ -4,11 +4,11 @@
  */
 
 export const siteConfig = {
-  name: "DMATHS Learning Hub",
-  shortName: "DMATHS",
+  name: "D-MATHS Learning Hub",
+  shortName: "D-MATHS",
   tagline: "Master real skills with premium, expert-led courses.",
   description:
-    "DMATHS Learning Hub is a modern learning platform to master mathematics, coding, and in-demand skills through beautifully crafted, expert-led online courses.",
+    "D-MATHS Learning Hub is a modern learning platform to master mathematics, coding, and in-demand skills through beautifully crafted, expert-led online courses.",
   url: "https://dmaths-learning-hub.vercel.app",
   ogImage: "/og.png",
   locale: "en_US",
@@ -18,7 +18,7 @@ export const siteConfig = {
     "mathematics",
     "coding",
     "LMS",
-    "DMATHS",
+    "D-MATHS",
     "certificates",
     "learn online",
   ],
@@ -34,7 +34,7 @@ export const siteConfig = {
     primary: "#2563EB",
     dark: "#0F172A",
     light: "#FFFFFF",
-    accent: "#14B8A6",
+    accent: "#F97316",
   },
 } as const;
 

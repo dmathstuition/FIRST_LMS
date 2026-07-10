@@ -8,7 +8,7 @@ import { AuthError } from "@/features/auth/components/auth-error";
 
 export const metadata: Metadata = {
   title: "Sign in",
-  description: "Sign in to your DMATHS Learning Hub account.",
+  description: "Sign in to your D-MATHS Learning Hub account.",
 };
 
 export default async function LoginPage({

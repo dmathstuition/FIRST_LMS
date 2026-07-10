@@ -4,7 +4,7 @@ import { ResetPasswordForm } from "@/features/auth/components/reset-password-for
 
 export const metadata: Metadata = {
   title: "Set a new password",
-  description: "Choose a new password for your DMATHS account.",
+  description: "Choose a new password for your D-MATHS account.",
 };
 
 export default function ResetPasswordPage() {

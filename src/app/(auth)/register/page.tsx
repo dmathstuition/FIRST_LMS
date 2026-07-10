@@ -7,7 +7,7 @@ import { OAuthButtons } from "@/features/auth/components/oauth-buttons";
 
 export const metadata: Metadata = {
   title: "Create your account",
-  description: "Join DMATHS Learning Hub and start learning today.",
+  description: "Join D-MATHS Learning Hub and start learning today.",
 };
 
 export default async function RegisterPage({

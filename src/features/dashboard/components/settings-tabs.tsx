@@ -196,7 +196,7 @@ function AppearanceSettings() {
   return (
     <div>
       <p className="mb-4 text-sm text-muted-foreground">
-        Choose how DMATHS looks to you. Select a theme or sync with your system.
+        Choose how D-MATHS looks to you. Select a theme or sync with your system.
       </p>
       <div className="grid max-w-md grid-cols-3 gap-3">
         {options.map((opt) => {

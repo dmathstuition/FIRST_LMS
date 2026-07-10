@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { GraduationCap, Twitter, Github, Youtube, Linkedin } from "lucide-react";
+import { Twitter, Github, Youtube, Linkedin } from "lucide-react";
+
+import { Logo } from "@/components/logo";
 
 import { siteConfig, footerNav } from "@/config/site";
 
@@ -13,7 +15,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <span className="flex size-9 items-center justify-center rounded-xl bg-brand-gradient text-white">
-                <GraduationCap className="size-5" />
+                <Logo className="size-5" />
               </span>
               {siteConfig.name}
             </Link>

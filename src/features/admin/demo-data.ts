@@ -111,11 +111,11 @@ export const demoAudit: AdminAuditRow[] = [
 ];
 
 export const demoSettings: SiteSettings = {
-  siteName: "DMATHS Learning Hub",
+  siteName: "D-MATHS Learning Hub",
   primaryColor: "#2563EB",
-  accentColor: "#14B8A6",
+  accentColor: "#F97316",
   features: { affiliates: true, gamification: true, blog: true },
-  seoTitle: "DMATHS Learning Hub — Master real skills",
+  seoTitle: "D-MATHS Learning Hub — Master real skills",
   seoDescription:
     "A modern learning platform to master mathematics, coding, and in-demand skills.",
 };

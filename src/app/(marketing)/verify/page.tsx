@@ -8,7 +8,7 @@ import { SubmitButton } from "@/components/submit-button";
 export const metadata: Metadata = {
   title: "Verify a Certificate",
   description:
-    "Publicly verify the authenticity of a DMATHS Learning Hub certificate.",
+    "Publicly verify the authenticity of a D-MATHS Learning Hub certificate.",
   alternates: { canonical: "/verify" },
 };
 
@@ -31,7 +31,7 @@ export default function VerifyPage() {
         </h1>
         <p className="mt-3 text-muted-foreground">
           Enter a certificate&apos;s verification code (or scan its QR code) to
-          confirm it was genuinely issued by DMATHS Learning Hub.
+          confirm it was genuinely issued by D-MATHS Learning Hub.
         </p>
 
         <form

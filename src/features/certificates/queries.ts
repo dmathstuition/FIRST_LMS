@@ -22,7 +22,7 @@ export async function verifyCertificate(
   if (!integrations.supabase) {
     if (token === "demo" || token.toLowerCase() === "dmaths-demo") {
       return {
-        certificateNumber: "DMATHS-2026-DEMO1234",
+        certificateNumber: "D-MATHS-2026-DEMO1234",
         issuedAt: new Date().toISOString(),
         studentName: "Kwame Osei",
         courseTitle: "Calculus Made Intuitive",

@@ -70,7 +70,7 @@ export const demoStats: StudentStats = {
 export const demoCertificates: CertificateItem[] = [
   {
     id: "cert-1",
-    certificateNumber: "DMATHS-2026-A1B2C3D4",
+    certificateNumber: "D-MATHS-2026-A1B2C3D4",
     verificationToken: "demo",
     courseTitle: "Linear Algebra for Machine Learning",
     courseSlug: "linear-algebra-for-ml",

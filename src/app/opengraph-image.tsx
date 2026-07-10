@@ -20,7 +20,7 @@ export default function OpengraphImage() {
           justifyContent: "center",
           padding: 80,
           background:
-            "linear-gradient(135deg, #0F172A 0%, #1e293b 55%, #0f766e 100%)",
+            "linear-gradient(135deg, #0F172A 0%, #1e293b 55%, #1e3a8a 100%)",
           color: "white",
           fontFamily: "sans-serif",
         }}
@@ -36,17 +36,24 @@ export default function OpengraphImage() {
         >
           <div
             style={{
-              width: 64,
-              height: 64,
-              borderRadius: 16,
+              width: 72,
+              height: 72,
+              borderRadius: 18,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "linear-gradient(135deg, #2563EB 0%, #14B8A6 100%)",
-              fontWeight: 700,
+              background: "linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)",
             }}
           >
-            D
+            <svg width="46" height="46" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="15" stroke="white" strokeWidth="5" />
+              <path
+                d="M13 34 L35 14"
+                stroke="#F97316"
+                strokeWidth="5"
+                strokeLinecap="round"
+              />
+            </svg>
           </div>
           {siteConfig.name}
         </div>

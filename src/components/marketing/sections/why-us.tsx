@@ -49,7 +49,7 @@ export function WhyUs() {
     <section className="py-20 sm:py-28">
       <div className="container">
         <SectionHeading
-          eyebrow="Why DMATHS"
+          eyebrow="Why D-MATHS"
           title="Everything you need to actually learn"
           subtitle="Not just videos — a complete, thoughtfully designed learning experience."
         />

@@ -9,7 +9,7 @@ import { Reveal } from "@/components/motion/reveal";
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Learning strategies, study tips, and insights from the DMATHS Learning Hub team.",
+    "Learning strategies, study tips, and insights from the D-MATHS Learning Hub team.",
   alternates: { canonical: "/blog" },
 };
 
@@ -53,7 +53,7 @@ export default function BlogPage() {
     <div className="container py-12 sm:py-16">
       <header className="mx-auto max-w-2xl text-center">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          The DMATHS Blog
+          The D-MATHS Blog
         </h1>
         <p className="mt-3 text-muted-foreground">
           Learning strategies, study tips, and insights to help you learn faster.

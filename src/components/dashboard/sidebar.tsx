@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GraduationCap } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 import { siteConfig } from "@/config/site";
 import {
@@ -64,7 +64,7 @@ export function SidebarContent({
       <div className="flex h-16 items-center gap-2 px-5 font-semibold">
         <Link href="/" className="flex items-center gap-2" onClick={onNavigate}>
           <span className="flex size-9 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-sm">
-            <GraduationCap className="size-5" />
+            <Logo className="size-5" />
           </span>
           <span className="text-sm">{siteConfig.shortName}</span>
         </Link>

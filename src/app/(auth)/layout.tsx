@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { GraduationCap, Quote } from "lucide-react";
+import { Quote } from "lucide-react";
+
+import { Logo } from "@/components/logo";
 
 import { siteConfig } from "@/config/site";
 
@@ -24,7 +26,7 @@ export default function AuthLayout({
           className="relative z-10 inline-flex items-center gap-2 text-lg font-semibold"
         >
           <span className="flex size-9 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
-            <GraduationCap className="size-5" />
+            <Logo className="size-5" />
           </span>
           {siteConfig.shortName}
         </Link>
@@ -32,7 +34,7 @@ export default function AuthLayout({
         <div className="relative z-10 max-w-md space-y-6">
           <Quote className="size-10 opacity-60" />
           <p className="text-2xl font-medium leading-snug">
-            “DMATHS didn&apos;t just teach me formulas — it gave me the intuition
+            “D-MATHS didn&apos;t just teach me formulas — it gave me the intuition
             to actually understand. I finally get math.”
           </p>
           <div>
@@ -58,7 +60,7 @@ export default function AuthLayout({
             className="mb-8 inline-flex items-center gap-2 text-lg font-semibold lg:hidden"
           >
             <span className="flex size-9 items-center justify-center rounded-xl bg-brand-gradient text-white">
-              <GraduationCap className="size-5" />
+              <Logo className="size-5" />
             </span>
             {siteConfig.shortName}
           </Link>

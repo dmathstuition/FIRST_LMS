@@ -59,7 +59,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          DMATHS Learning Hub is where ambitious learners go to truly understand
+          D-MATHS Learning Hub is where ambitious learners go to truly understand
           mathematics, coding, and the skills that shape careers — beautifully
           taught, at your pace.
         </m.p>

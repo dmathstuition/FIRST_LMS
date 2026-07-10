@@ -2,10 +2,11 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { GraduationCap, Menu, LayoutDashboard } from "lucide-react";
+import { Menu, LayoutDashboard } from "lucide-react";
 
 import { siteConfig, marketingNav } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/logo";
 import { useUser } from "@/hooks/use-user";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -47,7 +48,7 @@ export function Navbar() {
       >
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <span className="flex size-9 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-sm">
-            <GraduationCap className="size-5" />
+            <Logo className="size-5" />
           </span>
           <span className="hidden sm:inline">{siteConfig.name}</span>
           <span className="sm:hidden">{siteConfig.shortName}</span>
@@ -102,7 +103,7 @@ export function Navbar() {
             <DialogContent className="left-auto right-0 top-0 h-dvh max-w-xs translate-x-0 translate-y-0 rounded-none rounded-l-2xl data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right">
               <DialogTitle className="flex items-center gap-2">
                 <span className="flex size-8 items-center justify-center rounded-lg bg-brand-gradient text-white">
-                  <GraduationCap className="size-4" />
+                  <Logo className="size-4" />
                 </span>
                 {siteConfig.shortName}
               </DialogTitle>
