@@ -11,9 +11,10 @@ import {
   type DashboardNavItem,
 } from "@/config/dashboard";
 import { instructorNav, switchToLearningLink } from "@/config/instructor";
+import { adminNav, adminFooterLink } from "@/config/admin";
 import { cn } from "@/lib/utils";
 
-export type DashboardVariant = "student" | "instructor";
+export type DashboardVariant = "student" | "instructor" | "admin";
 
 /**
  * Resolve nav + footer link for a variant.
@@ -24,9 +25,14 @@ export type DashboardVariant = "student" | "instructor";
  * directly and selects by a serializable `variant` string.
  */
 function resolveNav(variant: DashboardVariant) {
-  return variant === "instructor"
-    ? { nav: instructorNav, footerLink: switchToLearningLink }
-    : { nav: studentNav, footerLink: browseCoursesLink };
+  switch (variant) {
+    case "instructor":
+      return { nav: instructorNav, footerLink: switchToLearningLink };
+    case "admin":
+      return { nav: adminNav, footerLink: adminFooterLink };
+    default:
+      return { nav: studentNav, footerLink: browseCoursesLink };
+  }
 }
 
 /** Determine whether a nav item is the active route. */
