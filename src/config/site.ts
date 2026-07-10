@@ -1,0 +1,80 @@
+/**
+ * Global site configuration — brand identity, navigation, SEO defaults.
+ * Single source of truth consumed by the layout, navbar, footer, and metadata.
+ */
+
+export const siteConfig = {
+  name: "DMATHS Learning Hub",
+  shortName: "DMATHS",
+  tagline: "Master real skills with premium, expert-led courses.",
+  description:
+    "DMATHS Learning Hub is a modern learning platform to master mathematics, coding, and in-demand skills through beautifully crafted, expert-led online courses.",
+  url: "https://dmaths-learning-hub.vercel.app",
+  ogImage: "/og.png",
+  locale: "en_US",
+  keywords: [
+    "online courses",
+    "e-learning",
+    "mathematics",
+    "coding",
+    "LMS",
+    "DMATHS",
+    "certificates",
+    "learn online",
+  ],
+  contactEmail: "hello@dmaths.io",
+  links: {
+    twitter: "https://twitter.com/dmaths",
+    github: "https://github.com/dmathstuition",
+    youtube: "https://youtube.com/@dmaths",
+    linkedin: "https://linkedin.com/company/dmaths",
+  },
+  /** Brand color tokens (kept in sync with globals.css / tailwind.config.ts). */
+  colors: {
+    primary: "#2563EB",
+    dark: "#0F172A",
+    light: "#FFFFFF",
+    accent: "#14B8A6",
+  },
+} as const;
+
+export type SiteConfig = typeof siteConfig;
+
+/** Primary marketing navigation. */
+export const marketingNav = [
+  { title: "Courses", href: "/courses" },
+  { title: "Categories", href: "/#categories" },
+  { title: "Pricing", href: "/#pricing" },
+  { title: "Blog", href: "/blog" },
+  { title: "Verify Certificate", href: "/verify" },
+] as const;
+
+/** Footer link groups. */
+export const footerNav = [
+  {
+    title: "Platform",
+    links: [
+      { title: "Browse Courses", href: "/courses" },
+      { title: "Pricing", href: "/#pricing" },
+      { title: "Become an Instructor", href: "/register?role=instructor" },
+      { title: "Certificate Verification", href: "/verify" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { title: "About", href: "/#instructor" },
+      { title: "Blog", href: "/blog" },
+      { title: "Testimonials", href: "/#testimonials" },
+      { title: "FAQ", href: "/#faq" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { title: "Terms of Service", href: "/terms" },
+      { title: "Privacy Policy", href: "/privacy" },
+      { title: "Refund Policy", href: "/refunds" },
+    ],
+  },
+] as const;
