@@ -82,3 +82,74 @@ export interface PricingPlan {
   highlighted?: boolean;
   cta: string;
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Student dashboard                                                          */
+/* -------------------------------------------------------------------------- */
+
+export type EnrollmentStatus = "active" | "completed" | "refunded" | "cancelled";
+
+/** A course the current user is enrolled in, with their progress attached. */
+export interface EnrolledCourse extends CourseCard {
+  progressPct: number;
+  completedLessons: number;
+  status: EnrollmentStatus;
+  lastLessonTitle: string | null;
+  enrolledAt: string;
+}
+
+/** Headline metrics for the dashboard home. */
+export interface StudentStats {
+  coursesEnrolled: number;
+  coursesCompleted: number;
+  hoursLearned: number;
+  certificatesEarned: number;
+  currentStreak: number;
+  xpPoints: number;
+}
+
+export interface CertificateItem {
+  id: string;
+  certificateNumber: string;
+  verificationToken: string;
+  courseTitle: string;
+  courseSlug: string;
+  issuedAt: string;
+}
+
+export interface AchievementBadge {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  icon: string;
+  earned: boolean;
+  earnedAt: string | null;
+}
+
+export interface ActivityItem {
+  id: string;
+  type: "lesson" | "quiz" | "certificate" | "enrollment" | "badge";
+  title: string;
+  courseTitle: string | null;
+  at: string;
+}
+
+export interface NotificationItem {
+  id: string;
+  type: NotificationKind;
+  title: string;
+  body: string | null;
+  link: string | null;
+  read: boolean;
+  at: string;
+}
+
+export type NotificationKind =
+  | "system"
+  | "course"
+  | "payment"
+  | "assignment"
+  | "quiz"
+  | "message"
+  | "achievement";
