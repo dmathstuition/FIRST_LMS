@@ -33,12 +33,15 @@ export function CourseCard({
 }) {
   const hasDiscount =
     course.discountPrice != null && course.discountPrice < course.price;
+  const discountPct = hasDiscount
+    ? Math.round((1 - course.discountPrice! / course.price) * 100)
+    : 0;
 
   return (
     <Link
       href={`/courses/${course.slug}`}
       className={cn(
-        "group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:-translate-y-1",
+        "group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm ring-1 ring-transparent transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:ring-primary/20 focus-visible:-translate-y-1.5 focus-visible:ring-primary/20",
         className,
       )}
     >
@@ -55,8 +58,10 @@ export function CourseCard({
         ) : (
           <div className="animated-gradient absolute inset-0" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-        <PlayCircle className="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity group-hover:opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-100" />
+        <span className="absolute left-1/2 top-1/2 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-primary opacity-0 shadow-lg backdrop-blur transition-all duration-300 group-hover:opacity-100">
+          <PlayCircle className="size-7" />
+        </span>
         <div className="absolute left-3 top-3 flex gap-2">
           {course.isBestseller && (
             <Badge variant="warning" className="shadow-sm">
@@ -67,6 +72,11 @@ export function CourseCard({
             {levelLabels[course.level]}
           </Badge>
         </div>
+        {hasDiscount && (
+          <span className="absolute right-3 top-3 rounded-full bg-accent px-2.5 py-1 text-xs font-bold text-accent-foreground shadow-sm">
+            -{discountPct}%
+          </span>
+        )}
       </div>
 
       {/* Body */}
@@ -130,9 +140,14 @@ export function CourseCard({
             )}
           </span>
           {hasDiscount && (
-            <span className="text-sm text-muted-foreground line-through">
-              {formatCurrency(course.price, course.currency)}
-            </span>
+            <>
+              <span className="text-sm text-muted-foreground line-through">
+                {formatCurrency(course.price, course.currency)}
+              </span>
+              <span className="ml-auto rounded-md bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                Save {discountPct}%
+              </span>
+            </>
           )}
         </div>
       </div>

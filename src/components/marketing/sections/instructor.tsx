@@ -1,5 +1,13 @@
 import Image from "next/image";
-import { Code2, BarChart3, BrainCircuit, Sigma } from "lucide-react";
+import {
+  BarChart3,
+  BrainCircuit,
+  Code2,
+  GraduationCap,
+  Sigma,
+  Sparkles,
+  type LucideIcon,
+} from "lucide-react";
 
 import { Reveal } from "@/components/motion/reveal";
 import { Badge } from "@/components/ui/badge";
@@ -16,10 +24,11 @@ export function Instructor() {
     <section id="instructor" className="border-y bg-muted/30 py-20 sm:py-28">
       <div className="container grid items-center gap-12 lg:grid-cols-2">
         <Reveal className="order-2 lg:order-1">
-          <span className="text-sm font-semibold uppercase tracking-wider text-primary">
+          <span className="inline-flex items-center gap-2 rounded-full border bg-card/60 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary shadow-sm backdrop-blur">
+            <span className="size-1.5 rounded-full bg-accent" />
             Meet the founder
           </span>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
             The vision behind D-MATHS
           </h2>
           <p className="mt-2 font-medium text-muted-foreground">
@@ -65,24 +74,37 @@ export function Instructor() {
           </div>
 
           <div className="mt-8 grid grid-cols-3 gap-4">
-            <Focus label="Mathematics" />
-            <Focus label="Coding for Kids" />
-            <Focus label="Tech in Teaching" />
+            <Focus icon={Sigma} label="Mathematics" />
+            <Focus icon={Code2} label="Coding for Kids" />
+            <Focus icon={GraduationCap} label="Tech in Teaching" />
           </div>
         </Reveal>
 
         <Reveal className="order-1 lg:order-2" y={32}>
           <div className="relative mx-auto max-w-md">
-            <div className="absolute -inset-4 -z-10 rounded-3xl bg-brand-gradient opacity-20 blur-2xl" />
-            <div className="animated-gradient overflow-hidden rounded-3xl border shadow-xl">
+            <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-brand-gradient opacity-25 blur-3xl" />
+            <div className="animated-gradient glow-ring overflow-hidden rounded-3xl border p-1.5">
               <Image
                 src="/founder.jpg"
                 alt="D-MATHS founder"
                 width={800}
                 height={1000}
-                className="aspect-[4/5] w-full object-cover"
+                className="aspect-[4/5] w-full rounded-[1.35rem] object-cover"
                 priority
               />
+            </div>
+
+            {/* Floating credential chip */}
+            <div className="glass-strong absolute -bottom-5 -left-4 flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 sm:-left-6">
+              <span className="flex size-9 items-center justify-center rounded-lg bg-brand-gradient text-white">
+                <Sparkles className="size-4" />
+              </span>
+              <div className="leading-tight">
+                <p className="text-sm font-semibold">Founder & Lead Educator</p>
+                <p className="text-xs text-muted-foreground">
+                  Web Dev · Data · AI
+                </p>
+              </div>
             </div>
           </div>
         </Reveal>
@@ -91,9 +113,12 @@ export function Instructor() {
   );
 }
 
-function Focus({ label }: { label: string }) {
+function Focus({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
   return (
-    <div className="rounded-xl border bg-card p-3 text-center text-sm font-medium shadow-sm">
+    <div className="flex flex-col items-center gap-2 rounded-xl border bg-card p-3 text-center text-sm font-medium shadow-sm transition-colors hover:border-primary/30">
+      <span className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <Icon className="size-5" />
+      </span>
       {label}
     </div>
   );
