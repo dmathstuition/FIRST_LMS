@@ -9,6 +9,7 @@ import {
   ScrollText,
   Settings,
   Compass,
+  LineChart,
 } from "lucide-react";
 
 import type { DashboardNavGroup, DashboardNavItem } from "./dashboard";
@@ -22,11 +23,17 @@ export const adminNav: DashboardNavGroup[] = [
     ],
   },
   {
+    heading: "Content",
+    items: [
+      { title: "Courses", href: "/admin/courses", icon: BookOpen },
+      { title: "Categories", href: "/admin/categories", icon: FolderTree },
+      { title: "Student Progress", href: "/admin/students", icon: LineChart },
+    ],
+  },
+  {
     heading: "Manage",
     items: [
       { title: "Users", href: "/admin/users", icon: Users },
-      { title: "Courses", href: "/admin/courses", icon: BookOpen },
-      { title: "Categories", href: "/admin/categories", icon: FolderTree },
       { title: "Coupons", href: "/admin/coupons", icon: Ticket },
       { title: "Orders", href: "/admin/orders", icon: Receipt },
     ],

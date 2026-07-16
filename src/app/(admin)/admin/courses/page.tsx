@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Pencil, Plus } from "lucide-react";
 
 import { requireRole } from "@/lib/auth";
 import { getAdminCourses } from "@/features/admin/queries";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -34,8 +35,14 @@ export default async function AdminCoursesPage() {
     <div className="mx-auto max-w-6xl">
       <PageHeader
         title="Courses"
-        description={`${courses.length} courses across the platform.`}
-      />
+        description={`${courses.length} courses across the platform. Create, upload lessons, and publish.`}
+      >
+        <Button asChild variant="gradient">
+          <Link href="/admin/courses/new">
+            <Plus className="size-4" /> New course
+          </Link>
+        </Button>
+      </PageHeader>
 
       <Card className="overflow-hidden">
         <Table>
@@ -79,13 +86,23 @@ export default async function AdminCoursesPage() {
                   <FeatureToggle courseId={c.id} featured={c.isFeatured} />
                 </TableCell>
                 <TableCell>
-                  <Link
-                    href={`/courses/${c.slug}`}
-                    className="text-muted-foreground hover:text-primary"
-                    aria-label="View course"
-                  >
-                    <ExternalLink className="size-4" />
-                  </Link>
+                  <div className="flex items-center justify-end gap-1">
+                    <Button asChild variant="outline" size="sm">
+                      <Link href={`/admin/courses/${c.id}`}>
+                        <Pencil className="size-3.5" /> Manage
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="icon"
+                      aria-label="View course"
+                    >
+                      <Link href={`/courses/${c.slug}`}>
+                        <ExternalLink className="size-4" />
+                      </Link>
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

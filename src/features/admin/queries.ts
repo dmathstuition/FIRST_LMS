@@ -3,6 +3,8 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { integrations } from "@/lib/env";
 import type { UserRole } from "@/types";
+import type { StudentRow } from "@/features/instructor/types";
+import { demoStudents } from "@/features/instructor/demo-data";
 import type {
   AdminAuditRow,
   AdminCategoryRow,
@@ -282,7 +284,42 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   }
 }
 
+/** Platform-wide student enrollments + progress (admin monitoring). */
+export async function getStudentProgress(): Promise<StudentRow[]> {
+  if (!integrations.supabase) return demoStudents;
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("enrollments")
+      .select(
+        `progress_pct, created_at,
+         student:user_id ( full_name, avatar_url ),
+         course:course_id ( title )`,
+      )
+      .order("created_at", { ascending: false })
+      .limit(200);
+    if (error || !data) return [];
+    return (data as unknown as EnrollmentJoinRow[]).map((row, i) => ({
+      id: `${i}`,
+      name: row.student?.full_name ?? "Student",
+      avatarUrl: row.student?.avatar_url ?? null,
+      courseTitle: row.course?.title ?? "Course",
+      progressPct: Number(row.progress_pct ?? 0),
+      enrolledAt: row.created_at,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 /* -------------------------------- helpers --------------------------------- */
+
+type EnrollmentJoinRow = {
+  progress_pct: number | null;
+  created_at: string;
+  student: { full_name: string | null; avatar_url: string | null } | null;
+  course: { title: string } | null;
+};
 
 type UserJoinRow = {
   id: string;

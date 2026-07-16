@@ -6,6 +6,8 @@ import {
   Palette,
   Briefcase,
   GraduationCap,
+  BrainCircuit,
+  Laptop,
   BookOpen,
   type LucideIcon,
 } from "lucide-react";
@@ -22,6 +24,8 @@ const iconMap: Record<string, LucideIcon> = {
   Palette,
   Briefcase,
   GraduationCap,
+  BrainCircuit,
+  Laptop,
 };
 
 /** Browse-by-category grid. Server component. */

@@ -29,7 +29,7 @@ insert into auth.users (
   crypt('Password123!', gen_salt('bf')),
   now(), now(), now(),
   '{"provider":"email","providers":["email"]}',
-  '{"full_name":"Dr. Ada Mensah","role":"instructor"}',
+  '{"full_name":"D-MATHS","role":"instructor"}',
   '', '', '', ''
 )
 on conflict (id) do update set
@@ -55,27 +55,27 @@ on conflict (provider_id, provider) do nothing;
 
 -- Enrich the auto-created profile + instructor profile.
 update public.profiles
-set headline = 'Mathematician & Software Engineer • 12+ years teaching',
-    bio = 'Ada has helped over 40,000 students master mathematics and programming through clear, first-principles teaching. Former university lecturer and lead engineer.',
-    avatar_url = 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=256&h=256&fit=crop&crop=faces',
-    country = 'GH'
+set headline = 'Founder • Web Developer, Data Analyst & AI Engineer',
+    bio = 'The visionary behind D-MATHS — a passionate educator and technology professional dedicated to transforming education through innovation. He combines web development, data analysis, and AI to make learning practical, engaging, and impactful.',
+    avatar_url = '/founder.jpg',
+    country = 'NG'
 where id = '00000000-0000-0000-0000-000000000001';
 
 update public.instructor_profiles
 set approved = true,
-    years_experience = 12,
-    expertise = array['Mathematics','Data Science','Web Development'],
+    years_experience = 8,
+    expertise = array['Mathematics','Coding for Kids','AI & Technology'],
     social_links = '{"twitter":"https://twitter.com/dmaths","linkedin":"https://linkedin.com/in/dmaths"}'
 where id = '00000000-0000-0000-0000-000000000001';
 
 -- ---- Categories
 insert into public.categories (id, name, slug, description, icon, sort_order) values
-  ('10000000-0000-0000-0000-000000000001','Mathematics','mathematics','From algebra to advanced calculus, taught visually.','Sigma',1),
-  ('10000000-0000-0000-0000-000000000002','Web Development','web-development','Build modern, production-ready web apps.','Code',2),
-  ('10000000-0000-0000-0000-000000000003','Data Science','data-science','Turn data into insight and intelligent models.','BarChart3',3),
-  ('10000000-0000-0000-0000-000000000004','Design','design','UI/UX and product design fundamentals.','Palette',4),
-  ('10000000-0000-0000-0000-000000000005','Business','business','Entrepreneurship, finance, and growth.','Briefcase',5),
-  ('10000000-0000-0000-0000-000000000006','Test Prep','test-prep','Ace standardized exams with proven strategies.','GraduationCap',6)
+  ('10000000-0000-0000-0000-000000000001','Mathematics','mathematics','From foundations to advanced topics, taught visually and intuitively.','Sigma',1),
+  ('10000000-0000-0000-0000-000000000002','Coding for Kids','coding-for-kids','Fun, hands-on programming for young learners — from Scratch to Python.','Code',2),
+  ('10000000-0000-0000-0000-000000000003','Data Analysis','data-analysis','Turn data into insight with practical, real-world skills.','BarChart3',3),
+  ('10000000-0000-0000-0000-000000000004','Artificial Intelligence','artificial-intelligence','Understand and build with AI — no PhD required.','BrainCircuit',4),
+  ('10000000-0000-0000-0000-000000000005','Tech in Teaching','tech-in-teaching','Empower educators with modern digital-classroom tools.','GraduationCap',5),
+  ('10000000-0000-0000-0000-000000000006','Web Development','web-development','Build modern, production-ready websites and apps.','Laptop',6)
 on conflict (id) do nothing;
 
 -- ---- Courses (all published so they appear in the catalog + featured strip)
@@ -86,69 +86,69 @@ insert into public.courses (
 ) values
   (
     '20000000-0000-0000-0000-000000000001',
-    'calculus-made-intuitive',
-    'Calculus Made Intuitive',
-    'Master limits, derivatives, and integrals with visual intuition.',
-    'A complete, visual-first calculus course that builds deep intuition before formalism. Perfect for students and self-learners who want to truly understand — not just memorize.',
+    'mathematics-made-simple',
+    'Mathematics Made Simple',
+    'Build real intuition for numbers, algebra, and problem-solving.',
+    'A visual-first mathematics course that builds deep intuition before formalism. Perfect for students and self-learners who want to truly understand — not just memorize.',
     'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&h=450&fit=crop',
-    'beginner', 89.99, 'USD', 49.99, 'published', true,
+    'beginner', 49.99, 'USD', 29.99, 'published', true,
     '10000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001',
-    4.9, 1284, 18450, 720, 96, now()
+    4.9, 128, 1840, 720, 96, now()
   ),
   (
     '20000000-0000-0000-0000-000000000002',
-    'fullstack-nextjs-15',
-    'Full-Stack Web Development with Next.js 15',
-    'Ship production apps with React 19, TypeScript, and Supabase.',
-    'Go from zero to deploying real, scalable full-stack applications using the exact stack top companies use today.',
+    'coding-for-kids-scratch-to-python',
+    'Coding for Kids: Scratch to Python',
+    'A fun, step-by-step coding journey for young learners.',
+    'Kids start with visual Scratch projects and gradually move to real Python — building games and apps while learning to think like programmers.',
     'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=450&fit=crop',
-    'intermediate', 129.99, 'USD', 79.99, 'published', true,
+    'beginner', 59.99, 'USD', 39.99, 'published', true,
     '10000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000001',
-    4.8, 2093, 24310, 1080, 142, now()
+    4.8, 209, 2431, 640, 88, now()
   ),
   (
     '20000000-0000-0000-0000-000000000003',
-    'data-science-python',
-    'Data Science with Python',
-    'Pandas, visualization, and machine learning from scratch.',
-    'Learn the full data-science workflow with hands-on projects: cleaning, analysis, visualization, and your first ML models.',
+    'data-analysis-for-beginners',
+    'Data Analysis for Beginners',
+    'Spreadsheets, Python, and visualization from scratch.',
+    'Learn the full data-analysis workflow with hands-on projects: cleaning, analysis, and turning raw numbers into clear, compelling insight.',
     'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=450&fit=crop',
-    'intermediate', 109.99, 'USD', null, 'published', true,
+    'beginner', 69.99, 'USD', null, 'published', true,
     '10000000-0000-0000-0000-000000000003','00000000-0000-0000-0000-000000000001',
-    4.7, 876, 11230, 900, 118, now()
+    4.7, 87, 1123, 600, 74, now()
   ),
   (
     '20000000-0000-0000-0000-000000000004',
-    'linear-algebra-for-ml',
-    'Linear Algebra for Machine Learning',
-    'The math that powers modern AI, explained clearly.',
-    'Vectors, matrices, eigenvalues, and decompositions — with direct connections to how machine learning actually works.',
+    'ai-for-everyone',
+    'AI for Everyone',
+    'Understand and use artificial intelligence in everyday life.',
+    'Demystify artificial intelligence — how it works, where it is used, and how anyone can apply modern AI tools to learn and work smarter.',
     'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&h=450&fit=crop',
-    'advanced', 99.99, 'USD', 59.99, 'published', true,
-    '10000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001',
-    4.9, 543, 7820, 660, 84, now()
+    'beginner', 79.99, 'USD', 49.99, 'published', true,
+    '10000000-0000-0000-0000-000000000004','00000000-0000-0000-0000-000000000001',
+    4.9, 54, 782, 480, 60, now()
   ),
   (
     '20000000-0000-0000-0000-000000000005',
-    'ui-ux-design-foundations',
-    'UI/UX Design Foundations',
-    'Design beautiful, usable products people love.',
-    'Master the principles of visual and interaction design, then build a portfolio-ready product from scratch.',
-    'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=450&fit=crop',
-    'beginner', 79.99, 'USD', 39.99, 'published', false,
-    '10000000-0000-0000-0000-000000000004','00000000-0000-0000-0000-000000000001',
-    4.6, 412, 9640, 540, 72, now()
+    'tech-in-teaching',
+    'Tech in Teaching: The Digital Classroom',
+    'Practical tools and strategies for modern educators.',
+    'Equip teachers with the digital tools, platforms, and techniques to create engaging, effective, technology-powered classrooms.',
+    'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=450&fit=crop',
+    'all', 59.99, 'USD', 39.99, 'published', false,
+    '10000000-0000-0000-0000-000000000005','00000000-0000-0000-0000-000000000001',
+    4.8, 41, 964, 540, 68, now()
   ),
   (
     '20000000-0000-0000-0000-000000000006',
-    'sat-math-mastery',
-    'SAT Math Mastery',
-    'Proven strategies to maximize your SAT math score.',
-    'Every concept, question type, and time-saving technique you need to walk into the SAT confident.',
-    'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=450&fit=crop',
-    'all', 69.99, 'USD', null, 'published', false,
+    'web-development-foundations',
+    'Web Development Foundations',
+    'Build real websites with HTML, CSS, and JavaScript.',
+    'Go from zero to building and deploying real, responsive websites — the practical foundation every modern developer needs.',
+    'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=450&fit=crop',
+    'beginner', 69.99, 'USD', null, 'published', false,
     '10000000-0000-0000-0000-000000000006','00000000-0000-0000-0000-000000000001',
-    4.8, 731, 13920, 480, 64, now()
+    4.8, 73, 1392, 720, 92, now()
   )
 on conflict (id) do nothing;
 

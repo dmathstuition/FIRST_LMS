@@ -144,7 +144,7 @@ export function getDemoPlayerData(slug: string): CoursePlayerData | null {
   if (!course) return null;
 
   const sections =
-    slug === "calculus-made-intuitive"
+    slug === "mathematics-made-simple"
       ? buildCalculusSections()
       : buildCalculusSections().slice(0, 2); // generic shorter curriculum
 

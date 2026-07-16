@@ -25,7 +25,7 @@ export async function verifyCertificate(
         certificateNumber: "D-MATHS-2026-DEMO1234",
         issuedAt: new Date().toISOString(),
         studentName: "Kwame Osei",
-        courseTitle: "Calculus Made Intuitive",
+        courseTitle: "Mathematics Made Simple",
       };
     }
     return null;

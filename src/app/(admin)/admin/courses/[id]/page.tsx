@@ -6,15 +6,15 @@ import { getInstructorCourseDetail } from "@/features/instructor/queries";
 import { getCategories } from "@/features/courses/queries";
 import { CourseBuilderPanel } from "@/features/instructor/components/course-builder-panel";
 
-export const metadata: Metadata = { title: "Course Builder" };
+export const metadata: Metadata = { title: "Course Builder · Admin" };
 
-export default async function CourseBuilderPage({
+export default async function AdminCourseBuilderPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await requireRole(["instructor", "admin"], "/instructor");
+  await requireRole(["admin"], "/admin");
 
   const [detail, categories] = await Promise.all([
     getInstructorCourseDetail(id),
@@ -23,10 +23,6 @@ export default async function CourseBuilderPage({
   if (!detail) notFound();
 
   return (
-    <CourseBuilderPanel
-      detail={detail}
-      categories={categories}
-      basePath="/instructor"
-    />
+    <CourseBuilderPanel detail={detail} categories={categories} basePath="/admin" />
   );
 }

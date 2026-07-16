@@ -49,7 +49,7 @@ export const demoSignupSeries: SeriesPoint[] = [
 ];
 
 export const demoUsers: AdminUserRow[] = [
-  { id: "u1", name: "Dr. Ada Mensah", email: "instructor@dmaths.io", role: "instructor", avatarUrl: null, joinedAt: daysAgo(400), xp: 0 },
+  { id: "u1", name: "D-MATHS", email: "instructor@dmaths.io", role: "instructor", avatarUrl: null, joinedAt: daysAgo(400), xp: 0 },
   { id: "u2", name: "Kwame Osei", email: "kwame@example.com", role: "student", avatarUrl: null, joinedAt: daysAgo(21), xp: 2480 },
   { id: "u3", name: "Amara Nwosu", email: "amara@example.com", role: "student", avatarUrl: null, joinedAt: daysAgo(12), xp: 1320 },
   { id: "u4", name: "Daniel Park", email: "daniel@example.com", role: "student", avatarUrl: null, joinedAt: daysAgo(40), xp: 3890 },
@@ -103,11 +103,11 @@ export const demoTickets: AdminTicketRow[] = [
 ];
 
 export const demoAudit: AdminAuditRow[] = [
-  { id: "a1", actorName: "Site Admin", action: "course.published", entity: "Calculus Made Intuitive", at: daysAgo(0) },
-  { id: "a2", actorName: "Dr. Ada Mensah", action: "course.created", entity: "SAT Math Mastery", at: daysAgo(1) },
+  { id: "a1", actorName: "Site Admin", action: "course.published", entity: "Mathematics Made Simple", at: daysAgo(0) },
+  { id: "a2", actorName: "D-MATHS", action: "course.created", entity: "Tech in Teaching: The Digital Classroom", at: daysAgo(1) },
   { id: "a3", actorName: "Site Admin", action: "coupon.created", entity: "WELCOME20", at: daysAgo(2) },
   { id: "a4", actorName: "Site Admin", action: "user.role_changed", entity: "marcus@example.com → instructor", at: daysAgo(3) },
-  { id: "a5", actorName: "Site Admin", action: "category.created", entity: "Test Prep", at: daysAgo(4) },
+  { id: "a5", actorName: "Site Admin", action: "category.created", entity: "Tech in Teaching", at: daysAgo(4) },
 ];
 
 export const demoSettings: SiteSettings = {

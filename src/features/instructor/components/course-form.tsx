@@ -28,12 +28,17 @@ export function CourseForm({
   categories,
   defaults,
   courseId,
+  basePath = "/instructor",
 }: {
   categories: Category[];
   defaults?: CourseFormDefaults;
   courseId?: string;
+  /** "/instructor" or "/admin" — where create redirects and edits revalidate. */
+  basePath?: string;
 }) {
-  const action = courseId ? updateCourse.bind(null, courseId) : createCourse;
+  const action = courseId
+    ? updateCourse.bind(null, basePath, courseId)
+    : createCourse.bind(null, basePath);
   const [state, formAction] = useActionState<FormState, FormData>(
     action,
     undefined,

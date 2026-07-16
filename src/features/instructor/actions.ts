@@ -37,8 +37,13 @@ async function currentUserId() {
   return user?.id ?? null;
 }
 
-/** Create a new (draft) course and redirect to its builder. */
+/**
+ * Create a new (draft) course and redirect to its builder. `basePath` is
+ * "/instructor" or "/admin" so the same flow works from either panel (admins
+ * author courses too — RLS allows it via is_admin()).
+ */
 export async function createCourse(
+  basePath: string,
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
@@ -88,12 +93,13 @@ export async function createCourse(
     return { ok: false, message: error?.message ?? "Could not create course." };
   }
 
-  revalidatePath("/instructor/courses");
-  redirect(`/instructor/courses/${(data as { id: string }).id}`);
+  revalidatePath(`${basePath}/courses`);
+  redirect(`${basePath}/courses/${(data as { id: string }).id}`);
 }
 
 /** Update core course details. */
 export async function updateCourse(
+  basePath: string,
   courseId: string,
   _prev: FormState,
   formData: FormData,
@@ -128,8 +134,16 @@ export async function updateCourse(
     .eq("id", courseId);
 
   if (error) return { ok: false, message: error.message };
-  revalidatePath(`/instructor/courses/${courseId}`);
+  revalidateCourse(courseId);
   return { ok: true, message: "Course details saved." };
+}
+
+/** Revalidate a course's builder + list pages in both the instructor and admin panels. */
+function revalidateCourse(courseId: string) {
+  revalidatePath(`/instructor/courses/${courseId}`);
+  revalidatePath(`/admin/courses/${courseId}`);
+  revalidatePath("/instructor/courses");
+  revalidatePath("/admin/courses");
 }
 
 /** Toggle a course between draft and published. */
@@ -143,8 +157,7 @@ export async function setCourseStatus(courseId: string, publish: boolean) {
       published_at: publish ? new Date().toISOString() : null,
     })
     .eq("id", courseId);
-  revalidatePath(`/instructor/courses/${courseId}`);
-  revalidatePath("/instructor/courses");
+  revalidateCourse(courseId);
 }
 
 /** Add a curriculum section to a course. */
@@ -164,7 +177,7 @@ export async function addSection(courseId: string, formData: FormData) {
     title,
     sort_order: count ?? 0,
   });
-  revalidatePath(`/instructor/courses/${courseId}`);
+  revalidateCourse(courseId);
 }
 
 /** Payload shape for the quiz builder. */
@@ -269,7 +282,7 @@ export async function saveQuiz(
       );
     }
 
-    revalidatePath(`/instructor/courses/${courseId}`);
+    revalidateCourse(courseId);
     return { ok: true, message: "Quiz saved successfully." };
   } catch {
     return { ok: false, message: "Something went wrong saving the quiz." };
@@ -300,5 +313,5 @@ export async function addLesson(
     type,
     sort_order: count ?? 0,
   });
-  revalidatePath(`/instructor/courses/${courseId}`);
+  revalidateCourse(courseId);
 }
