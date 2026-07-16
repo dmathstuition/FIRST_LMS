@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { absoluteUrl } from "@/lib/utils";
 import { Hero } from "@/components/marketing/sections/hero";
+import { SkillsMarquee } from "@/components/marketing/sections/skills-marquee";
 import { Stats } from "@/components/marketing/sections/stats";
 import { FeaturedCourses } from "@/components/marketing/sections/featured-courses";
 import { Categories } from "@/components/marketing/sections/categories";
@@ -43,6 +44,7 @@ export default function HomePage() {
       />
 
       <Hero />
+      <SkillsMarquee />
       <Stats />
       <FeaturedCourses />
       <Categories />

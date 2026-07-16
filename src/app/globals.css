@@ -107,9 +107,21 @@
     @apply border border-white/15 bg-white/70 backdrop-blur-xl dark:border-white/10 dark:bg-white/5;
   }
 
+  /* Stronger, more opaque glass — for floating cards/mockups that must read
+     clearly against a busy aurora background. */
+  .glass-strong {
+    @apply border border-white/40 bg-white/80 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-slate-900/70;
+  }
+
   /* Brand gradient text. */
   .text-gradient {
     @apply bg-brand-gradient bg-clip-text text-transparent;
+  }
+
+  /* Warm/cool premium gradient text echoing the D-MATHS logo (blue → orange). */
+  .text-gradient-warm {
+    background: linear-gradient(100deg, #2563eb 0%, #6366f1 40%, #f97316 100%);
+    @apply bg-clip-text text-transparent;
   }
 
   /* Animated multi-stop gradient background for hero sections. */
@@ -132,6 +144,21 @@
   .skeleton::after {
     @apply absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent content-[''] dark:via-white/10;
   }
+
+  /* Soft ambient glow ring for floating premium surfaces. */
+  .glow-ring {
+    box-shadow:
+      0 0 0 1px rgba(37, 99, 235, 0.08),
+      0 20px 60px -20px rgba(37, 99, 235, 0.45),
+      0 8px 24px -12px rgba(249, 115, 22, 0.25);
+  }
+}
+
+/* Fine film-grain / noise texture overlay for depth on hero backgrounds.
+   Kept in a plain layer so the data-URI SVG isn't mangled by @apply. */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
 }
 
 /* Custom scrollbar for a polished feel. */
