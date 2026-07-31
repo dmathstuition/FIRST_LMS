@@ -14,6 +14,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/verify`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/login`, changeFrequency: "yearly", priority: 0.2 },
     { url: `${base}/register`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/terms`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${base}/privacy`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${base}/refunds`, changeFrequency: "yearly", priority: 0.2 },
   ];
 
   const courses = await getPublishedCourses();
