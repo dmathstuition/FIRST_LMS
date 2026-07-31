@@ -16,32 +16,39 @@ export interface SessionUser {
  * Returns null when unauthenticated. Safe to call from Server Components.
  */
 export async function getSessionUser(): Promise<SessionUser | null> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Defensive: a misconfigured or unreachable Supabase project makes the auth
+  // call throw. Treat any failure as "not signed in" so protected pages redirect
+  // to /login instead of surfacing a 500 to the visitor.
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  if (!user) return null;
+    if (!user) return null;
 
-  const { data } = await supabase
-    .from("profiles")
-    .select("full_name, avatar_url, role")
-    .eq("id", user.id)
-    .single();
+    const { data } = await supabase
+      .from("profiles")
+      .select("full_name, avatar_url, role")
+      .eq("id", user.id)
+      .single();
 
-  const profile = data as {
-    full_name: string | null;
-    avatar_url: string | null;
-    role: UserRole;
-  } | null;
+    const profile = data as {
+      full_name: string | null;
+      avatar_url: string | null;
+      role: UserRole;
+    } | null;
 
-  return {
-    id: user.id,
-    email: user.email ?? null,
-    fullName: profile?.full_name ?? null,
-    avatarUrl: profile?.avatar_url ?? null,
-    role: profile?.role ?? "student",
-  };
+    return {
+      id: user.id,
+      email: user.email ?? null,
+      fullName: profile?.full_name ?? null,
+      avatarUrl: profile?.avatar_url ?? null,
+      role: profile?.role ?? "student",
+    };
+  } catch {
+    return null;
+  }
 }
 
 /** Require an authenticated user; redirect to /login otherwise. */

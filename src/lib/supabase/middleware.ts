@@ -48,17 +48,26 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  // IMPORTANT: getUser() revalidates the token with the Auth server.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   const { pathname } = request.nextUrl;
   const isProtected =
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/instructor") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/learn");
+
+  // IMPORTANT: getUser() revalidates the token with the Auth server.
+  // Wrapped defensively: if Supabase is unreachable or misconfigured, the auth
+  // call can throw — and because this middleware runs on EVERY request, an
+  // unhandled throw would turn every page (including the public landing page)
+  // into a 500. Instead we degrade gracefully: public pages render normally,
+  // and protected pages fall through to the unauthenticated redirect below.
+  let user: { id: string } | null = null;
+  try {
+    const result = await supabase.auth.getUser();
+    user = result.data.user;
+  } catch {
+    user = null;
+  }
 
   if (isProtected && !user) {
     const redirectUrl = request.nextUrl.clone();
@@ -72,13 +81,18 @@ export async function updateSession(request: NextRequest) {
     user &&
     (pathname.startsWith("/admin") || pathname.startsWith("/instructor"))
   ) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+    let role = "student";
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+      role = (profile as { role?: string } | null)?.role ?? "student";
+    } catch {
+      role = "student";
+    }
 
-    const role = (profile as { role?: string } | null)?.role ?? "student";
     if (pathname.startsWith("/admin") && role !== "admin") {
       const url = request.nextUrl.clone();
       url.pathname = "/dashboard";
