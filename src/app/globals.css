@@ -124,6 +124,19 @@
     @apply bg-clip-text text-transparent;
   }
 
+  /* Signature D-MATHS "marker" — a hand-drawn orange stroke under an emphasized
+     word. Deliberately imperfect so it reads editorial/human, not templated.
+     The stroke echoes the diagonal accent in the logo. */
+  .marker {
+    position: relative;
+    display: inline;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 22' preserveAspectRatio='none'%3E%3Cpath d='M4 14 C 60 6, 120 6, 180 11 S 260 16, 296 9' stroke='%23F97316' stroke-width='7' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center bottom 0.02em;
+    background-size: 100% 0.42em;
+    padding-bottom: 0.12em;
+  }
+
   /* Animated multi-stop gradient background for hero sections. */
   .animated-gradient {
     background: linear-gradient(

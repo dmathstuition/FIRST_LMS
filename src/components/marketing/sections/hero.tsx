@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { m } from "framer-motion";
-import { ArrowRight, PlayCircle, Sparkles, Star } from "lucide-react";
+import { ArrowRight, PlayCircle, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/logo";
 import { HeroPreview } from "@/components/marketing/hero-preview";
 
 /**
@@ -50,20 +51,19 @@ export function Hero() {
             transition={{ duration: 0.5 }}
           >
             <span className="inline-flex items-center gap-2 rounded-full border bg-card/60 px-4 py-1.5 text-sm font-medium shadow-sm backdrop-blur">
-              <Sparkles className="size-4 text-accent" />
-              Learn smarter with AI-powered courses
+              <Logo className="size-4 text-primary" strokeWidth={6} />
+              Founder-led courses in maths, code &amp; AI
             </span>
           </m.div>
 
           <m.h1
-            className="mt-6 max-w-xl text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl"
+            className="mt-6 max-w-xl text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl xl:text-6xl"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Master real skills with{" "}
-            <span className="text-gradient-warm">premium, expert-led</span>{" "}
-            courses
+            Learn the <span className="marker">skills</span> schools skip —
+            taught properly.
           </m.h1>
 
           <m.p
@@ -72,9 +72,9 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            D-MATHS Learning Hub is where ambitious learners go to truly
-            understand mathematics, coding, and the skills that shape careers —
-            beautifully taught, at your pace.
+            D-MATHS is a founder-led learning studio for mathematics, coding for
+            kids, data and AI. Real understanding over rote memorisation — built
+            for learners across Africa and beyond.
           </m.p>
 
           <m.div
@@ -96,28 +96,39 @@ export function Hero() {
           </m.div>
 
           <m.div
-            className="mt-8 flex items-center gap-2 text-sm text-muted-foreground"
+            className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted-foreground"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.45 }}
           >
-            <div className="flex -space-x-2">
-              {[
-                "from-blue-500 to-cyan-500",
-                "from-violet-500 to-purple-500",
-                "from-amber-500 to-orange-500",
-                "from-emerald-500 to-teal-500",
-              ].map((g, i) => (
-                <span
-                  key={i}
-                  className={`size-8 rounded-full border-2 border-background bg-gradient-to-br ${g}`}
-                />
-              ))}
+            <div className="flex items-center gap-2">
+              <div className="flex -space-x-2">
+                {[
+                  { i: "KO", c: "bg-primary/15 text-primary" },
+                  { i: "AN", c: "bg-accent/15 text-accent" },
+                  { i: "DP", c: "bg-emerald-500/15 text-emerald-600" },
+                  { i: "ZA", c: "bg-indigo-500/15 text-indigo-600" },
+                ].map((a) => (
+                  <span
+                    key={a.i}
+                    className={`flex size-8 items-center justify-center rounded-full border-2 border-background text-[11px] font-semibold ${a.c}`}
+                  >
+                    {a.i}
+                  </span>
+                ))}
+              </div>
+              <span>Learners in 50+ countries</span>
             </div>
-            <span className="flex items-center gap-1">
-              <Star className="size-4 fill-amber-400 text-amber-400" />
-              <strong className="text-foreground">4.9/5</strong> from 100,000+
-              learners
+            <span className="flex items-center gap-1.5">
+              <span className="flex">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    className="size-4 fill-amber-400 text-amber-400"
+                  />
+                ))}
+              </span>
+              <strong className="text-foreground">4.9</strong> average rating
             </span>
           </m.div>
         </div>

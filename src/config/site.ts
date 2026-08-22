@@ -6,9 +6,9 @@
 export const siteConfig = {
   name: "D-MATHS Learning Hub",
   shortName: "D-MATHS",
-  tagline: "Master real skills with premium, expert-led courses.",
+  tagline: "Learn the skills schools skip — taught properly",
   description:
-    "D-MATHS Learning Hub is a modern learning platform to master mathematics, coding, and in-demand skills through beautifully crafted, expert-led online courses.",
+    "D-MATHS is a founder-led learning studio for mathematics, coding for kids, data and AI — real understanding over rote memorisation, for learners across Africa and beyond.",
   url: "https://dmaths-learning-hub.vercel.app",
   ogImage: "/og.png",
   locale: "en_US",
