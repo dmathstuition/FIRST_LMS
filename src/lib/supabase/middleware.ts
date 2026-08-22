@@ -4,7 +4,7 @@ import {
 } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { env } from "@/lib/env";
+import { env, integrations } from "@/lib/env";
 
 /**
  * Refreshes the Supabase auth session on every request and enforces
@@ -19,6 +19,28 @@ import { env } from "@/lib/env";
  * with a `next` param so they return to their destination after signing in.
  */
 export async function updateSession(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const isProtected =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/instructor") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/learn");
+
+  // Fast path: when Supabase isn't configured (demo mode), there is no auth
+  // server to talk to. Skip the network round-trip entirely — otherwise every
+  // request would block on a doomed call to the placeholder host, which is what
+  // makes the site feel like it's "hanging". Public pages pass straight through;
+  // protected pages redirect to /login (nothing to authenticate against).
+  if (!integrations.supabase) {
+    if (isProtected) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/login";
+      redirectUrl.searchParams.set("next", pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -47,13 +69,6 @@ export async function updateSession(request: NextRequest) {
       },
     },
   );
-
-  const { pathname } = request.nextUrl;
-  const isProtected =
-    pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/instructor") ||
-    pathname.startsWith("/admin") ||
-    pathname.startsWith("/learn");
 
   // IMPORTANT: getUser() revalidates the token with the Auth server.
   // Wrapped defensively: if Supabase is unreachable or misconfigured, the auth

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 
 import { createClient } from "@/lib/supabase/server";
+import { clientIdentifier, rateLimit } from "@/lib/rate-limit";
 import {
   forgotPasswordSchema,
   loginSchema,
@@ -22,6 +23,28 @@ import {
 
 export type AuthActionResult = { error: string } | void;
 
+/**
+ * Throttle sensitive auth endpoints by client IP. Returns an error result when
+ * the caller has exceeded the window, otherwise null to proceed. Centralized so
+ * every auth action applies the same brute-force protection consistently.
+ */
+async function checkRateLimit(
+  bucket: string,
+  { limit, windowMs }: { limit: number; windowMs: number },
+): Promise<{ error: string } | null> {
+  const id = await clientIdentifier();
+  const result = rateLimit(bucket, id, { limit, windowMs });
+  if (!result.success) {
+    const mins = Math.ceil(result.retryAfter / 60);
+    return {
+      error: `Too many attempts. Please try again in ${
+        mins <= 1 ? "a minute" : `${mins} minutes`
+      }.`,
+    };
+  }
+  return null;
+}
+
 async function siteOrigin() {
   // Prefer configured site URL; fall back to the request origin.
   const configured = process.env.NEXT_PUBLIC_SITE_URL;
@@ -36,6 +59,13 @@ export async function signInWithPassword(
   _prev: AuthActionResult,
   formData: FormData,
 ): Promise<AuthActionResult> {
+  // Brute-force protection: 5 sign-in attempts per IP per minute.
+  const limited = await checkRateLimit("signin", {
+    limit: 5,
+    windowMs: 60_000,
+  });
+  if (limited) return limited;
+
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -57,6 +87,13 @@ export async function signUp(
   _prev: AuthActionResult,
   formData: FormData,
 ): Promise<AuthActionResult> {
+  // Limit account creation to 5 per IP per 10 minutes to curb spam signups.
+  const limited = await checkRateLimit("signup", {
+    limit: 5,
+    windowMs: 10 * 60_000,
+  });
+  if (limited) return limited;
+
   const parsed = registerSchema.safeParse({
     fullName: formData.get("fullName"),
     email: formData.get("email"),
@@ -100,6 +137,13 @@ export async function requestPasswordReset(
   _prev: AuthActionResult,
   formData: FormData,
 ): Promise<AuthActionResult> {
+  // Limit reset-email requests to 3 per IP per 15 minutes (anti-abuse).
+  const limited = await checkRateLimit("password-reset", {
+    limit: 3,
+    windowMs: 15 * 60_000,
+  });
+  if (limited) return limited;
+
   const parsed = forgotPasswordSchema.safeParse({
     email: formData.get("email"),
   });
