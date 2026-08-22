@@ -82,11 +82,11 @@ export const demoReviews: ReviewRow[] = [
 ];
 
 export const demoEarnings: EarningTxn[] = [
-  { id: "e1", courseTitle: "Coding for Kids: Scratch to Python", student: "Amara Nwosu", gross: 79.99, net: 63.99, at: daysAgo(0) },
-  { id: "e2", courseTitle: "Mathematics Made Simple", student: "Liam Walsh", gross: 49.99, net: 39.99, at: daysAgo(1) },
-  { id: "e3", courseTitle: "Data Analysis for Beginners", student: "Daniel Park", gross: 109.99, net: 87.99, at: daysAgo(2) },
-  { id: "e4", courseTitle: "Tech in Teaching: The Digital Classroom", student: "Zainab Ali", gross: 69.99, net: 55.99, at: daysAgo(3) },
-  { id: "e5", courseTitle: "Mathematics Made Simple", student: "Kwame Osei", gross: 49.99, net: 39.99, at: daysAgo(5) },
+  { id: "e1", courseTitle: "Coding for Kids: Scratch to Python", student: "Amara Nwosu", gross: 3000, net: 2550, at: daysAgo(0) },
+  { id: "e2", courseTitle: "Mathematics Made Simple", student: "Liam Walsh", gross: 2500, net: 2125, at: daysAgo(1) },
+  { id: "e3", courseTitle: "Data Analysis for Beginners", student: "Daniel Park", gross: 5000, net: 4250, at: daysAgo(2) },
+  { id: "e4", courseTitle: "Tech in Teaching: The Digital Classroom", student: "Zainab Ali", gross: 2500, net: 2125, at: daysAgo(3) },
+  { id: "e5", courseTitle: "Mathematics Made Simple", student: "Kwame Osei", gross: 2500, net: 2125, at: daysAgo(5) },
 ];
 
 export const demoMessages: MessageThread[] = [

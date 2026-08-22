@@ -91,7 +91,7 @@ insert into public.courses (
     'Build real intuition for numbers, algebra, and problem-solving.',
     'A visual-first mathematics course that builds deep intuition before formalism. Perfect for students and self-learners who want to truly understand — not just memorize.',
     'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&h=450&fit=crop',
-    'beginner', 49.99, 'USD', 29.99, 'published', true,
+    'beginner', 4500, 'NGN', 2500, 'published', true,
     '10000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000001',
     4.9, 128, 1840, 720, 96, now()
   ),
@@ -102,7 +102,7 @@ insert into public.courses (
     'A fun, step-by-step coding journey for young learners.',
     'Kids start with visual Scratch projects and gradually move to real Python — building games and apps while learning to think like programmers.',
     'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=450&fit=crop',
-    'beginner', 59.99, 'USD', 39.99, 'published', true,
+    'beginner', 5000, 'NGN', 3000, 'published', true,
     '10000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000001',
     4.8, 209, 2431, 640, 88, now()
   ),
@@ -113,7 +113,7 @@ insert into public.courses (
     'Spreadsheets, Python, and visualization from scratch.',
     'Learn the full data-analysis workflow with hands-on projects: cleaning, analysis, and turning raw numbers into clear, compelling insight.',
     'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=450&fit=crop',
-    'beginner', 69.99, 'USD', null, 'published', true,
+    'beginner', 5000, 'NGN', null, 'published', true,
     '10000000-0000-0000-0000-000000000003','00000000-0000-0000-0000-000000000001',
     4.7, 87, 1123, 600, 74, now()
   ),
@@ -124,7 +124,7 @@ insert into public.courses (
     'Understand and use artificial intelligence in everyday life.',
     'Demystify artificial intelligence — how it works, where it is used, and how anyone can apply modern AI tools to learn and work smarter.',
     'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&h=450&fit=crop',
-    'beginner', 79.99, 'USD', 49.99, 'published', true,
+    'beginner', 6000, 'NGN', 3500, 'published', true,
     '10000000-0000-0000-0000-000000000004','00000000-0000-0000-0000-000000000001',
     4.9, 54, 782, 480, 60, now()
   ),
@@ -135,7 +135,7 @@ insert into public.courses (
     'Practical tools and strategies for modern educators.',
     'Equip teachers with the digital tools, platforms, and techniques to create engaging, effective, technology-powered classrooms.',
     'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=450&fit=crop',
-    'all', 59.99, 'USD', 39.99, 'published', false,
+    'all', 4000, 'NGN', 2500, 'published', false,
     '10000000-0000-0000-0000-000000000005','00000000-0000-0000-0000-000000000001',
     4.8, 41, 964, 540, 68, now()
   ),
@@ -146,7 +146,7 @@ insert into public.courses (
     'Build real websites with HTML, CSS, and JavaScript.',
     'Go from zero to building and deploying real, responsive websites — the practical foundation every modern developer needs.',
     'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&h=450&fit=crop',
-    'beginner', 69.99, 'USD', null, 'published', false,
+    'beginner', 5500, 'NGN', null, 'published', false,
     '10000000-0000-0000-0000-000000000006','00000000-0000-0000-0000-000000000001',
     4.8, 73, 1392, 720, 92, now()
   )

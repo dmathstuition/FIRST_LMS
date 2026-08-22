@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   AlertCircle,
   GripVertical,
+  Sparkles,
 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -67,6 +68,56 @@ export function QuizBuilder({ courseId }: { courseId: string }) {
   ]);
   const [pending, setPending] = React.useState(false);
   const [result, setResult] = React.useState<FormState>(undefined);
+
+  // AI generation state
+  const [aiTopic, setAiTopic] = React.useState("");
+  const [aiCount, setAiCount] = React.useState(5);
+  const [aiPending, setAiPending] = React.useState(false);
+  const [aiError, setAiError] = React.useState<string | null>(null);
+
+  async function generateWithAi() {
+    if (!aiTopic.trim() || aiPending) return;
+    setAiError(null);
+    setAiPending(true);
+    try {
+      const res = await fetch("/api/ai/quiz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: aiTopic, count: aiCount }),
+      });
+      const data = (await res.json()) as {
+        questions?: {
+          prompt: string;
+          options: string[];
+          correctIndex: number;
+        }[];
+        error?: string;
+      };
+      if (!res.ok || !data.questions?.length) {
+        setAiError(data.error ?? "No questions were generated. Try again.");
+        return;
+      }
+      const generated: EditorQuestion[] = data.questions.map((q) => ({
+        id: newId(),
+        type: "multiple_choice",
+        prompt: q.prompt,
+        points: 1,
+        options: q.options.map((content, i) => ({
+          content,
+          isCorrect: i === q.correctIndex,
+        })),
+      }));
+      // Replace an empty starter question, otherwise append.
+      setQuestions((qs) => {
+        const meaningful = qs.filter((q) => q.prompt.trim());
+        return [...meaningful, ...generated];
+      });
+    } catch {
+      setAiError("Couldn't reach the generator. Please try again.");
+    } finally {
+      setAiPending(false);
+    }
+  }
 
   function addQuestion(type: QType) {
     setQuestions((qs) => [...qs, blankQuestion(type)]);
@@ -174,6 +225,62 @@ export function QuizBuilder({ courseId }: { courseId: string }) {
           {questions.length} question{questions.length === 1 ? "" : "s"} ·{" "}
           {totalPoints} point{totalPoints === 1 ? "" : "s"} total
         </p>
+      </Card>
+
+      {/* AI generation */}
+      <Card className="border-primary/20 bg-primary/[0.03] p-5">
+        <div className="flex items-center gap-2">
+          <span className="flex size-7 items-center justify-center rounded-lg bg-brand-gradient text-white">
+            <Sparkles className="size-4" />
+          </span>
+          <div>
+            <p className="text-sm font-semibold">Generate with AI</p>
+            <p className="text-xs text-muted-foreground">
+              Describe a topic or paste lesson content — we&apos;ll draft
+              multiple-choice questions you can edit.
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+          <Input
+            value={aiTopic}
+            onChange={(e) => setAiTopic(e.target.value)}
+            placeholder="e.g. Introduction to fractions for beginners"
+            aria-label="Topic or content for AI"
+          />
+          <div className="flex items-center gap-2">
+            <Label htmlFor="ai-count" className="text-xs text-muted-foreground">
+              How many
+            </Label>
+            <Input
+              id="ai-count"
+              type="number"
+              min={1}
+              max={10}
+              value={aiCount}
+              onChange={(e) => setAiCount(Number(e.target.value))}
+              className="w-20"
+            />
+          </div>
+          <Button
+            type="button"
+            variant="gradient"
+            onClick={generateWithAi}
+            disabled={aiPending || !aiTopic.trim()}
+          >
+            {aiPending ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Sparkles className="size-4" />
+            )}
+            {aiPending ? "Generating…" : "Generate"}
+          </Button>
+        </div>
+        {aiError && (
+          <p className="mt-3 flex items-center gap-1.5 text-xs text-destructive">
+            <AlertCircle className="size-3.5" /> {aiError}
+          </p>
+        )}
       </Card>
 
       {/* Questions */}

@@ -9,11 +9,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/** Format a number as currency. Defaults to USD; pass a currency code to override. */
+/** Format a number as currency. Defaults to Naira; pass a currency code to override. */
 export function formatCurrency(
   amount: number,
-  currency = "USD",
-  locale = "en-US",
+  currency = "NGN",
+  locale = currency === "NGN" ? "en-NG" : "en-US",
 ) {
   return new Intl.NumberFormat(locale, {
     style: "currency",

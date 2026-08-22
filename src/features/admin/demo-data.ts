@@ -88,11 +88,11 @@ export const demoCoupons: AdminCouponRow[] = [
 ];
 
 export const demoOrders: AdminOrderRow[] = [
-  { id: "o1", userName: "Amara Nwosu", total: 79.99, currency: "USD", status: "paid", itemCount: 1, createdAt: daysAgo(0) },
-  { id: "o2", userName: "Liam Walsh", total: 49.99, currency: "USD", status: "paid", itemCount: 1, createdAt: daysAgo(1) },
-  { id: "o3", userName: "Daniel Park", total: 189.98, currency: "USD", status: "paid", itemCount: 2, createdAt: daysAgo(2) },
-  { id: "o4", userName: "Zainab Ali", total: 69.99, currency: "USD", status: "refunded", itemCount: 1, createdAt: daysAgo(3) },
-  { id: "o5", userName: "Kwame Osei", total: 49.99, currency: "USD", status: "pending", itemCount: 1, createdAt: daysAgo(4) },
+  { id: "o1", userName: "Amara Nwosu", total: 3000, currency: "NGN", status: "paid", itemCount: 1, createdAt: daysAgo(0) },
+  { id: "o2", userName: "Liam Walsh", total: 2500, currency: "NGN", status: "paid", itemCount: 1, createdAt: daysAgo(1) },
+  { id: "o3", userName: "Daniel Park", total: 8000, currency: "NGN", status: "paid", itemCount: 2, createdAt: daysAgo(2) },
+  { id: "o4", userName: "Zainab Ali", total: 3500, currency: "NGN", status: "refunded", itemCount: 1, createdAt: daysAgo(3) },
+  { id: "o5", userName: "Kwame Osei", total: 2500, currency: "NGN", status: "pending", itemCount: 1, createdAt: daysAgo(4) },
 ];
 
 export const demoTickets: AdminTicketRow[] = [

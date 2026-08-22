@@ -4,13 +4,13 @@ import { Check, Sparkles } from "lucide-react";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import type { PricingPlan } from "@/types";
 
 const plans: PricingPlan[] = [
   {
     name: "Single Course",
-    price: 49,
+    price: 2500,
     period: "one-time",
     description: "Perfect for focused learning on one topic.",
     features: [
@@ -24,7 +24,7 @@ const plans: PricingPlan[] = [
   },
   {
     name: "Pro Membership",
-    price: 19,
+    price: 2000,
     period: "per month",
     description: "Unlimited access to our entire library.",
     features: [
@@ -40,7 +40,7 @@ const plans: PricingPlan[] = [
   },
   {
     name: "Teams",
-    price: 99,
+    price: 15000,
     period: "per month",
     description: "For organizations upskilling their people.",
     features: [
@@ -86,7 +86,9 @@ export function Pricing() {
                   {plan.description}
                 </p>
                 <div className="mt-5 flex items-end gap-1">
-                  <span className="text-4xl font-bold">${plan.price}</span>
+                  <span className="text-4xl font-bold">
+                    {formatCurrency(plan.price)}
+                  </span>
                   <span className="mb-1 text-sm text-muted-foreground">
                     /{plan.period}
                   </span>

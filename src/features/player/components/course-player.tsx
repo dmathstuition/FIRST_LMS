@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { VideoPlayer } from "./video-player";
+import { AiAssistant } from "./ai-assistant";
 import { markLessonComplete, saveLessonNote } from "../actions";
 import { demoComments } from "../demo-data";
 import type {
@@ -379,6 +380,9 @@ export function CoursePlayer({ data }: { data: CoursePlayerData }) {
           </div>
         </div>
       )}
+
+      {/* Floating AI Study Assistant */}
+      <AiAssistant courseTitle={data.course.title} lessonTitle={lesson.title} />
     </div>
   );
 }

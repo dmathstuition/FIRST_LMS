@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { getCourseBySlug, getPublishedCourses } from "@/features/courses/queries";
+import { startCheckout } from "@/features/checkout/actions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -232,11 +233,16 @@ export default async function CourseDetailPage({
                 </div>
 
                 <div className="mt-5 flex flex-col gap-2">
-                  <Button asChild size="lg" variant="gradient">
-                    <Link href={`/register?next=/courses/${course.slug}`}>
-                      Enroll now
-                    </Link>
-                  </Button>
+                  <form action={startCheckout.bind(null, course.slug)}>
+                    <Button
+                      type="submit"
+                      size="lg"
+                      variant="gradient"
+                      className="w-full"
+                    >
+                      Enroll now · {formatCurrency(price, course.currency)}
+                    </Button>
+                  </form>
                   <Button asChild size="lg" variant="outline">
                     <Link href={`/courses/${course.slug}#preview`}>
                       <PlayCircle className="size-4" /> Watch preview
@@ -245,7 +251,8 @@ export default async function CourseDetailPage({
                 </div>
 
                 <p className="mt-3 text-center text-xs text-muted-foreground">
-                  30-day money-back guarantee
+                  Secure payment in Naira via Paystack · 14-day money-back
+                  guarantee
                 </p>
 
                 <ul className="mt-6 space-y-3 text-sm">
