@@ -38,8 +38,9 @@ const serverSchema = z.object({
   MUX_TOKEN_SECRET: z.string().optional(),
   BUNNY_STREAM_API_KEY: z.string().optional(),
 
-  // AI features (stubbed until keys provided).
-  ANTHROPIC_API_KEY: z.string().optional(),
+  // AI features (DeepSeek). Optional — falls back to a mock without a key.
+  DEEPSEEK_API_KEY: z.string().optional(),
+  DEEPSEEK_MODEL: z.string().optional(),
 
   NODE_ENV: z
     .enum(["development", "test", "production"])
@@ -98,7 +99,7 @@ export const integrations = {
     return Boolean(process.env.BUNNY_STREAM_API_KEY);
   },
   get ai() {
-    return Boolean(process.env.ANTHROPIC_API_KEY);
+    return Boolean(process.env.DEEPSEEK_API_KEY);
   },
   /** True when Supabase is configured with real (non-placeholder) credentials. */
   get supabase() {

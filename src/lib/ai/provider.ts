@@ -1,19 +1,19 @@
 /**
  * AI features abstraction (Course Assistant, Tutor, Quiz Generator, etc.).
  *
- * The real adapter targets the Anthropic Claude API. Until `ANTHROPIC_API_KEY`
- * is set, a deterministic mock returns helpful placeholder responses so the AI
- * UI can be built and demoed without a key or network. Server-only — never
- * import this into a client component (the SDK + key must stay server-side).
+ * The real adapter targets the DeepSeek API (OpenAI-compatible chat
+ * completions). Until `DEEPSEEK_API_KEY` is set, a deterministic mock returns
+ * helpful placeholder responses so the AI UI can be built and demoed without a
+ * key or network. Server-only — never import this into a client component (the
+ * API key must stay server-side).
  */
 import "server-only";
 
-import Anthropic from "@anthropic-ai/sdk";
-
 import { integrations } from "@/lib/env";
 
-/** Default model. Overridable via ANTHROPIC_MODEL (e.g. a cheaper tier). */
-const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-5";
+const DEEPSEEK_API = "https://api.deepseek.com/chat/completions";
+/** Default model. Overridable via DEEPSEEK_MODEL (e.g. "deepseek-reasoner"). */
+const MODEL = process.env.DEEPSEEK_MODEL || "deepseek-chat";
 
 export interface ChatMessage {
   role: "user" | "assistant";
@@ -35,7 +35,7 @@ export interface GeneratedQuizQuestion {
 }
 
 export interface AIProvider {
-  readonly name: "claude" | "mock";
+  readonly name: "deepseek" | "mock";
   /** Answer a learner question grounded in course/lesson context. */
   askTutor(req: TutorRequest): Promise<string>;
   /** Generate quiz questions from lesson content. */
@@ -53,7 +53,7 @@ class MockAIProvider implements AIProvider {
       `Here's a hint for "${req.question}" in the context of ` +
       `${req.lessonTitle ?? req.courseTitle}: break the problem into smaller ` +
       `steps and identify what you already know before solving. ` +
-      `(AI Tutor is running in mock mode — set ANTHROPIC_API_KEY to enable live answers.)`
+      `(AI Tutor is running in mock mode — set DEEPSEEK_API_KEY to enable live answers.)`
     );
   }
 
@@ -75,21 +75,49 @@ class MockAIProvider implements AIProvider {
   }
 }
 
-/**
- * Live adapter backed by the Anthropic Claude API. Instantiated only when
- * `ANTHROPIC_API_KEY` is present. Effort is kept low for the tutor so answers
- * are fast and inexpensive; quiz generation uses a bit more headroom.
- */
-class ClaudeProvider implements AIProvider {
-  readonly name = "claude" as const;
-  private client = new Anthropic(); // reads ANTHROPIC_API_KEY from the env
+interface OpenAIStyleMessage {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
 
-  private textOf(message: Anthropic.Message): string {
-    return message.content
-      .filter((b): b is Anthropic.TextBlock => b.type === "text")
-      .map((b) => b.text)
-      .join("\n")
-      .trim();
+/**
+ * Live adapter backed by the DeepSeek API (OpenAI-compatible chat completions).
+ * Instantiated only when `DEEPSEEK_API_KEY` is present.
+ */
+class DeepSeekProvider implements AIProvider {
+  readonly name = "deepseek" as const;
+  private apiKey = process.env.DEEPSEEK_API_KEY as string;
+
+  /** One chat completion call. `jsonMode` asks DeepSeek for strict JSON. */
+  private async chat(
+    messages: OpenAIStyleMessage[],
+    opts: { maxTokens: number; temperature?: number; jsonMode?: boolean },
+  ): Promise<string> {
+    const res = await fetch(DEEPSEEK_API, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+      body: JSON.stringify({
+        model: MODEL,
+        messages,
+        max_tokens: opts.maxTokens,
+        temperature: opts.temperature ?? 0.7,
+        ...(opts.jsonMode
+          ? { response_format: { type: "json_object" } }
+          : {}),
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`DeepSeek API error ${res.status}`);
+    }
+    const json = (await res.json()) as {
+      choices?: { message?: { content?: string } }[];
+    };
+    return (json.choices?.[0]?.message?.content ?? "").trim();
   }
 
   async askTutor(req: TutorRequest): Promise<string> {
@@ -105,20 +133,19 @@ class ClaudeProvider implements AIProvider {
       `(a few short paragraphs at most). If a question is unrelated to ` +
       `learning, gently steer back to the course.`;
 
-    const history = (req.history ?? []).map((m) => ({
+    const history: OpenAIStyleMessage[] = (req.history ?? []).map((m) => ({
       role: m.role,
       content: m.content,
     }));
 
-    const message = await this.client.messages.create({
-      model: MODEL,
-      max_tokens: 1024,
-      output_config: { effort: "low" },
-      system,
-      messages: [...history, { role: "user", content: req.question }],
-    });
-
-    return this.textOf(message);
+    return this.chat(
+      [
+        { role: "system", content: system },
+        ...history,
+        { role: "user", content: req.question },
+      ],
+      { maxTokens: 1024 },
+    );
   }
 
   async generateQuiz(
@@ -127,29 +154,26 @@ class ClaudeProvider implements AIProvider {
   ): Promise<GeneratedQuizQuestion[]> {
     const system =
       `You write high-quality multiple-choice quiz questions from lesson ` +
-      `content. Each question has exactly 4 options, one correct. Return ONLY ` +
-      `a JSON array (no prose, no code fences) of objects with keys: ` +
-      `"prompt" (string), "options" (array of 4 strings), "correctIndex" ` +
-      `(0-3), "explanation" (string).`;
+      `content. Each question has exactly 4 options, one correct. Return a JSON ` +
+      `object of the form {"questions": [{"prompt": string, "options": ` +
+      `[4 strings], "correctIndex": 0-3, "explanation": string}]}.`;
 
-    const message = await this.client.messages.create({
-      model: MODEL,
-      max_tokens: 2048,
-      output_config: { effort: "medium" },
-      system,
-      messages: [
+    const raw = await this.chat(
+      [
+        { role: "system", content: system },
         {
           role: "user",
           content: `Write ${count} questions from this lesson content:\n\n${content.slice(0, 8000)}`,
         },
       ],
-    });
+      { maxTokens: 2048, temperature: 0.4, jsonMode: true },
+    );
 
-    const raw = this.textOf(message);
     try {
-      const json = raw.slice(raw.indexOf("["), raw.lastIndexOf("]") + 1);
-      const parsed = JSON.parse(json) as GeneratedQuizQuestion[];
-      return parsed
+      const parsed = JSON.parse(raw) as {
+        questions?: GeneratedQuizQuestion[];
+      };
+      return (parsed.questions ?? [])
         .filter(
           (q) =>
             q?.prompt &&
@@ -164,24 +188,26 @@ class ClaudeProvider implements AIProvider {
   }
 
   async summarize(content: string): Promise<string> {
-    const message = await this.client.messages.create({
-      model: MODEL,
-      max_tokens: 512,
-      output_config: { effort: "low" },
-      system:
-        "Summarize the following lesson into 3-5 concise bullet points a " +
-        "learner can revise from. Return plain text bullets only.",
-      messages: [{ role: "user", content: content.slice(0, 8000) }],
-    });
-    return this.textOf(message);
+    return this.chat(
+      [
+        {
+          role: "system",
+          content:
+            "Summarize the following lesson into 3-5 concise bullet points a " +
+            "learner can revise from. Return plain text bullets only.",
+        },
+        { role: "user", content: content.slice(0, 8000) },
+      ],
+      { maxTokens: 512, temperature: 0.3 },
+    );
   }
 }
 
 /**
- * Resolve the active AI provider. Returns the live Claude adapter when
- * `ANTHROPIC_API_KEY` is configured, otherwise the offline mock.
+ * Resolve the active AI provider. Returns the live DeepSeek adapter when
+ * `DEEPSEEK_API_KEY` is configured, otherwise the offline mock.
  */
 export function getAIProvider(): AIProvider {
-  if (integrations.ai) return new ClaudeProvider();
+  if (integrations.ai) return new DeepSeekProvider();
   return new MockAIProvider();
 }

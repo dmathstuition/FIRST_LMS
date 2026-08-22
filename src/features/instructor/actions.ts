@@ -297,8 +297,24 @@ export async function addLesson(
 ) {
   const title = String(formData.get("title") ?? "").trim();
   const type = String(formData.get("type") ?? "video");
+  const videoUrl = String(formData.get("videoUrl") ?? "").trim();
+  const isPreview = formData.get("isPreview") === "on";
+  const durationMinutes = Number(formData.get("durationMinutes") ?? 0) || 0;
   if (!title) return;
   if (!integrations.supabase) return;
+
+  // Build the polymorphic `content` payload. For video lessons, store the
+  // source: a YouTube link becomes {provider:"youtube"}, anything else (an
+  // uploaded Storage URL or a direct MP4 link) becomes {provider:"url"}.
+  let content: Record<string, unknown> = {};
+  if (type === "video" && videoUrl) {
+    const yt = videoUrl.match(
+      /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/,
+    );
+    content = yt
+      ? { provider: "youtube", ref: yt[1] }
+      : { provider: "url", ref: videoUrl };
+  }
 
   const supabase = await createClient();
   const { count } = await supabase
@@ -311,6 +327,9 @@ export async function addLesson(
     section_id: sectionId,
     title,
     type,
+    content,
+    duration_minutes: durationMinutes,
+    is_preview: isPreview,
     sort_order: count ?? 0,
   });
   revalidateCourse(courseId);

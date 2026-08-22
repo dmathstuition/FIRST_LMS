@@ -12,7 +12,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatDuration } from "@/lib/utils";
+import { integrations } from "@/lib/env";
 import { addSection, addLesson } from "../actions";
+import { AddLessonForm } from "./add-lesson-form";
 import type { CurriculumSection } from "../types";
 
 /**
@@ -80,34 +82,14 @@ export function CurriculumEditor({
             ))}
           </ul>
 
-          {/* Add lesson */}
-          <form
+          {/* Add lesson (with video upload) */}
+          <AddLessonForm
             action={addLesson.bind(null, courseId, section.id)}
-            className="flex flex-col gap-2 border-t p-3 sm:flex-row"
-          >
-            <Input
-              name="title"
-              placeholder="New lesson title…"
-              required
-              className="flex-1"
-              aria-label={`New lesson in ${section.title}`}
-            />
-            <select
-              name="type"
-              defaultValue="video"
-              aria-label="Lesson type"
-              className="h-10 rounded-lg border border-input bg-background px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <option value="video">Video</option>
-              <option value="text">Text</option>
-              <option value="markdown">Markdown</option>
-              <option value="pdf">PDF</option>
-              <option value="quiz">Quiz</option>
-            </select>
-            <Button type="submit" variant="outline" size="sm">
-              <Plus className="size-4" /> Add lesson
-            </Button>
-          </form>
+            courseId={courseId}
+            sectionId={section.id}
+            sectionTitle={section.title}
+            storageEnabled={integrations.supabase}
+          />
         </Card>
       ))}
 

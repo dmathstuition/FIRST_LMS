@@ -10,7 +10,7 @@ import type { PricingPlan } from "@/types";
 const plans: PricingPlan[] = [
   {
     name: "Single Course",
-    price: 2500,
+    price: 5000,
     period: "one-time",
     description: "Perfect for focused learning on one topic.",
     features: [
@@ -24,7 +24,7 @@ const plans: PricingPlan[] = [
   },
   {
     name: "Pro Membership",
-    price: 2000,
+    price: 15000,
     period: "per month",
     description: "Unlimited access to our entire library.",
     features: [
@@ -40,7 +40,7 @@ const plans: PricingPlan[] = [
   },
   {
     name: "Teams",
-    price: 15000,
+    price: 35000,
     period: "per month",
     description: "For organizations upskilling their people.",
     features: [
