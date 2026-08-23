@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Logo } from "@/components/logo";
 
 import { siteConfig } from "@/config/site";
 import {
@@ -63,9 +63,13 @@ export function SidebarContent({
       {/* Brand */}
       <div className="flex h-16 items-center gap-2 px-5 font-semibold">
         <Link href="/" className="flex items-center gap-2" onClick={onNavigate}>
-          <span className="flex size-9 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-sm">
-            <Logo className="size-5" />
-          </span>
+          <Image
+            src="/logo.png"
+            alt={siteConfig.shortName}
+            width={36}
+            height={36}
+            className="size-9 rounded-xl object-contain"
+          />
           <span className="text-sm">{siteConfig.shortName}</span>
         </Link>
         {label && (

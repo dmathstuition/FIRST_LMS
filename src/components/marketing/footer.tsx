@@ -1,7 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Twitter, Github, Youtube, Linkedin } from "lucide-react";
-
-import { Logo } from "@/components/logo";
 
 import { siteConfig, footerNav } from "@/config/site";
 
@@ -14,9 +13,13 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 font-semibold">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-brand-gradient text-white">
-                <Logo className="size-5" />
-              </span>
+              <Image
+                src="/logo.png"
+                alt={siteConfig.name}
+                width={36}
+                height={36}
+                className="size-9 rounded-xl object-contain"
+              />
               {siteConfig.name}
             </Link>
             <p className="mt-4 max-w-xs text-sm text-muted-foreground">
