@@ -8,6 +8,7 @@ import type {
   CertificateItem,
   EnrolledCourse,
   NotificationItem,
+  Purchase,
   StudentStats,
   CourseCard,
 } from "@/types";
@@ -17,6 +18,7 @@ import {
   demoCertificates,
   demoEnrolledCourses,
   demoNotifications,
+  demoPurchases,
   demoStats,
   demoWishlist,
 } from "./demo-data";
@@ -176,6 +178,57 @@ export async function getCertificates(
       courseSlug: row.course?.slug ?? "",
       issuedAt: row.issued_at,
     }));
+  } catch {
+    return [];
+  }
+}
+
+/* ------------------------------ purchases --------------------------------- */
+
+interface OrderRow {
+  id: string;
+  status: Purchase["status"];
+  currency: string;
+  total: number;
+  created_at: string;
+  payments?: { reference: string; provider: string }[];
+  order_items?: {
+    title: string;
+    course?: { slug: string } | null;
+  }[];
+}
+
+export async function getPurchases(userId: string): Promise<Purchase[]> {
+  if (!integrations.supabase) return demoPurchases;
+
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("orders")
+      .select(
+        `id, status, currency, total, created_at,
+         payments ( reference, provider ),
+         order_items ( title, course:course_id ( slug ) )`,
+      )
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error || !data) return [];
+    return (data as unknown as OrderRow[]).map((row) => {
+      const item = row.order_items?.[0];
+      const payment = row.payments?.[0];
+      return {
+        id: row.id,
+        courseTitle: item?.title ?? "Course purchase",
+        courseSlug: item?.course?.slug ?? null,
+        amount: row.total,
+        currency: row.currency,
+        status: row.status,
+        reference: payment?.reference ?? null,
+        provider: payment?.provider ?? null,
+        at: row.created_at,
+      };
+    });
   } catch {
     return [];
   }

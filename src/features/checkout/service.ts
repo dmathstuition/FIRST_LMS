@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function recordPurchaseAndEnroll(opts: {
   userId: string;
   courseId: string;
+  courseTitle?: string;
   nairaAmount: number;
   reference: string;
 }): Promise<void> {
@@ -51,6 +52,14 @@ export async function recordPurchaseAndEnroll(opts: {
           amount: opts.nairaAmount,
           currency: "NGN",
           status: "paid",
+        });
+        // Line item so the receipt can show which course was bought.
+        await supabase.from("order_items").insert({
+          order_id: orderId,
+          course_id: opts.courseId,
+          title: opts.courseTitle ?? "Course",
+          unit_price: opts.nairaAmount,
+          quantity: 1,
         });
       }
     }

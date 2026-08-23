@@ -1,12 +1,20 @@
-import { Plus, GripVertical, Layers } from "lucide-react";
+import { Plus, Layers } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { integrations } from "@/lib/env";
-import { addSection, addLesson, updateLesson, deleteLesson } from "../actions";
+import {
+  addSection,
+  addLesson,
+  updateLesson,
+  deleteLesson,
+  updateSection,
+  deleteSection,
+} from "../actions";
 import { AddLessonForm } from "./add-lesson-form";
 import { LessonRow } from "./lesson-row";
+import { SectionHeader } from "./section-header";
 import type { CurriculumSection } from "../types";
 
 /**
@@ -35,17 +43,13 @@ export function CurriculumEditor({
 
       {sections.map((section, i) => (
         <Card key={section.id} className="overflow-hidden">
-          <div className="flex items-center gap-2 border-b bg-muted/30 px-4 py-3">
-            <GripVertical className="size-4 text-muted-foreground" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Section {i + 1}
-            </span>
-            <h3 className="font-medium">{section.title}</h3>
-            <span className="ml-auto text-xs text-muted-foreground">
-              {section.lessons.length} lesson
-              {section.lessons.length === 1 ? "" : "s"}
-            </span>
-          </div>
+          <SectionHeader
+            index={i + 1}
+            title={section.title}
+            lessonCount={section.lessons.length}
+            updateAction={updateSection.bind(null, courseId, section.id)}
+            deleteAction={deleteSection.bind(null, courseId, section.id)}
+          />
 
           {/* Lessons */}
           <ul className="divide-y">

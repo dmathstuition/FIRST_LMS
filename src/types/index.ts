@@ -117,6 +117,18 @@ export interface CertificateItem {
   issuedAt: string;
 }
 
+export interface Purchase {
+  id: string;
+  courseTitle: string;
+  courseSlug: string | null;
+  amount: number;
+  currency: string;
+  status: "paid" | "pending" | "failed" | "refunded";
+  reference: string | null;
+  provider: string | null;
+  at: string;
+}
+
 export interface AchievementBadge {
   id: string;
   slug: string;

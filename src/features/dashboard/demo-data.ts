@@ -5,6 +5,7 @@ import type {
   CertificateItem,
   EnrolledCourse,
   NotificationItem,
+  Purchase,
   StudentStats,
 } from "@/types";
 
@@ -56,6 +57,46 @@ export const demoEnrolledCourses: EnrolledCourse[] = [
 ];
 
 export const demoWishlist = [demoCourses[2], demoCourses[4]];
+
+const ref = () =>
+  `PSK-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+
+// Purchase history (mirrors the enrolled/paid courses).
+export const demoPurchases: Purchase[] = [
+  {
+    id: "p1",
+    courseTitle: demoCourses[0].title,
+    courseSlug: demoCourses[0].slug,
+    amount: demoCourses[0].discountPrice ?? demoCourses[0].price,
+    currency: "NGN",
+    status: "paid",
+    reference: ref(),
+    provider: "paystack",
+    at: daysAgo(21),
+  },
+  {
+    id: "p2",
+    courseTitle: demoCourses[1].title,
+    courseSlug: demoCourses[1].slug,
+    amount: demoCourses[1].discountPrice ?? demoCourses[1].price,
+    currency: "NGN",
+    status: "paid",
+    reference: ref(),
+    provider: "paystack",
+    at: daysAgo(12),
+  },
+  {
+    id: "p3",
+    courseTitle: demoCourses[3].title,
+    courseSlug: demoCourses[3].slug,
+    amount: demoCourses[3].discountPrice ?? demoCourses[3].price,
+    currency: "NGN",
+    status: "paid",
+    reference: ref(),
+    provider: "paystack",
+    at: daysAgo(60),
+  },
+];
 
 export const demoStats: StudentStats = {
   coursesEnrolled: demoEnrolledCourses.length,

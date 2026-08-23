@@ -206,6 +206,28 @@ export async function addSection(courseId: string, formData: FormData) {
   revalidateCourse(courseId);
 }
 
+/** Rename a section. */
+export async function updateSection(
+  courseId: string,
+  sectionId: string,
+  formData: FormData,
+) {
+  const title = String(formData.get("title") ?? "").trim();
+  if (!title) return;
+  if (!integrations.supabase) return;
+  const supabase = await createClient();
+  await supabase.from("sections").update({ title }).eq("id", sectionId);
+  revalidateCourse(courseId);
+}
+
+/** Delete a section and all its lessons (FK cascade). RLS enforces ownership. */
+export async function deleteSection(courseId: string, sectionId: string) {
+  if (!integrations.supabase) return;
+  const supabase = await createClient();
+  await supabase.from("sections").delete().eq("id", sectionId);
+  revalidateCourse(courseId);
+}
+
 /** Payload shape for the quiz builder. */
 export interface QuizPayload {
   title: string;

@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
       await recordPurchaseAndEnroll({
         userId,
         courseId,
+        courseTitle: md.courseTitle,
         nairaAmount: (result.amount ?? 0) / 100, // kobo → Naira
         reference: result.reference,
       });

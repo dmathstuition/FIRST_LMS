@@ -44,6 +44,7 @@ export async function startCheckout(courseSlug: string) {
     await recordPurchaseAndEnroll({
       userId: user.id,
       courseId: course.id,
+      courseTitle: course.title,
       nairaAmount: 0,
       reference: `free_${Date.now()}`,
     });
@@ -65,7 +66,7 @@ export async function startCheckout(courseSlug: string) {
     ],
     successUrl,
     cancelUrl,
-    metadata: { courseSlug },
+    metadata: { courseSlug, courseTitle: course.title },
   });
 
   redirect(session.url);

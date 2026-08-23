@@ -46,6 +46,7 @@ export default async function CheckoutCallbackPage({
     await recordPurchaseAndEnroll({
       userId: user.id,
       courseId: course.id,
+      courseTitle: course.title,
       nairaAmount: course.discountPrice ?? course.price,
       reference: reference ?? `unknown_${Date.now()}`,
     });
