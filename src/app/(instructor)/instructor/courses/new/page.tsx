@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 import { requireRole } from "@/lib/auth";
+import { integrations } from "@/lib/env";
 import { getCategories } from "@/features/courses/queries";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,7 +29,10 @@ export default async function NewCoursePage() {
       />
       <Card>
         <CardContent className="pt-6">
-          <CourseForm categories={categories} />
+          <CourseForm
+            categories={categories}
+            storageEnabled={integrations.supabase}
+          />
         </CardContent>
       </Card>
     </div>

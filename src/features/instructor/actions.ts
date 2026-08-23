@@ -25,9 +25,28 @@ const courseSchema = z.object({
   subtitle: z.string().max(160).optional().or(z.literal("")),
   categoryId: z.string().uuid().optional().or(z.literal("")),
   level: z.enum(["beginner", "intermediate", "advanced", "all"]).default("all"),
-  price: z.coerce.number().min(0).max(9999),
+  price: z.coerce.number().min(0).max(10_000_000), // Naira amounts
   description: z.string().max(4000).optional().or(z.literal("")),
 });
+
+/**
+ * Build a video lesson's polymorphic `content` payload from a URL. A YouTube
+ * link becomes {provider:"youtube"}; anything else (an uploaded Storage URL or
+ * a direct MP4) becomes {provider:"url"}. Returns undefined when there's nothing
+ * to set (non-video lesson, or no URL provided).
+ */
+function buildVideoContent(
+  type: string,
+  videoUrl: string,
+): Record<string, unknown> | undefined {
+  if (type !== "video" || !videoUrl) return undefined;
+  const yt = videoUrl.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/,
+  );
+  return yt
+    ? { provider: "youtube", ref: yt[1] }
+    : { provider: "url", ref: videoUrl };
+}
 
 async function currentUserId() {
   const supabase = await createClient();
@@ -70,6 +89,7 @@ export async function createCourse(
   const userId = await currentUserId();
   if (!userId) return { ok: false, message: "You must be signed in." };
 
+  const thumbnailUrl = String(formData.get("thumbnailUrl") ?? "").trim();
   const supabase = await createClient();
   const slug = `${slugify(parsed.data.title)}-${Math.random().toString(36).slice(2, 6)}`;
 
@@ -82,6 +102,7 @@ export async function createCourse(
       category_id: parsed.data.categoryId || null,
       level: parsed.data.level,
       price: parsed.data.price,
+      thumbnail_url: thumbnailUrl || null,
       instructor_id: userId,
       slug,
       status: "draft",
@@ -120,17 +141,22 @@ export async function updateCourse(
     return { ok: true, message: "Saved. (Connect Supabase to persist.)" };
   }
 
+  // Only overwrite the thumbnail when a new one was provided.
+  const thumbnailUrl = String(formData.get("thumbnailUrl") ?? "").trim();
+  const patch: Record<string, unknown> = {
+    title: parsed.data.title,
+    subtitle: parsed.data.subtitle || null,
+    description: parsed.data.description || null,
+    category_id: parsed.data.categoryId || null,
+    level: parsed.data.level,
+    price: parsed.data.price,
+  };
+  if (thumbnailUrl) patch.thumbnail_url = thumbnailUrl;
+
   const supabase = await createClient();
   const { error } = await supabase
     .from("courses")
-    .update({
-      title: parsed.data.title,
-      subtitle: parsed.data.subtitle || null,
-      description: parsed.data.description || null,
-      category_id: parsed.data.categoryId || null,
-      level: parsed.data.level,
-      price: parsed.data.price,
-    })
+    .update(patch)
     .eq("id", courseId);
 
   if (error) return { ok: false, message: error.message };
@@ -303,18 +329,7 @@ export async function addLesson(
   if (!title) return;
   if (!integrations.supabase) return;
 
-  // Build the polymorphic `content` payload. For video lessons, store the
-  // source: a YouTube link becomes {provider:"youtube"}, anything else (an
-  // uploaded Storage URL or a direct MP4 link) becomes {provider:"url"}.
-  let content: Record<string, unknown> = {};
-  if (type === "video" && videoUrl) {
-    const yt = videoUrl.match(
-      /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/,
-    );
-    content = yt
-      ? { provider: "youtube", ref: yt[1] }
-      : { provider: "url", ref: videoUrl };
-  }
+  const content = buildVideoContent(type, videoUrl) ?? {};
 
   const supabase = await createClient();
   const { count } = await supabase
@@ -332,5 +347,42 @@ export async function addLesson(
     is_preview: isPreview,
     sort_order: count ?? 0,
   });
+  revalidateCourse(courseId);
+}
+
+/** Update an existing lesson. Video source is only changed when a new URL is
+ * given, so "leave blank to keep the current video" works. */
+export async function updateLesson(
+  courseId: string,
+  lessonId: string,
+  formData: FormData,
+) {
+  const title = String(formData.get("title") ?? "").trim();
+  const type = String(formData.get("type") ?? "video");
+  const videoUrl = String(formData.get("videoUrl") ?? "").trim();
+  const isPreview = formData.get("isPreview") === "on";
+  const durationMinutes = Number(formData.get("durationMinutes") ?? 0) || 0;
+  if (!title) return;
+  if (!integrations.supabase) return;
+
+  const patch: Record<string, unknown> = {
+    title,
+    type,
+    duration_minutes: durationMinutes,
+    is_preview: isPreview,
+  };
+  const content = buildVideoContent(type, videoUrl);
+  if (content) patch.content = content;
+
+  const supabase = await createClient();
+  await supabase.from("lessons").update(patch).eq("id", lessonId);
+  revalidateCourse(courseId);
+}
+
+/** Delete a lesson. RLS enforces course ownership. */
+export async function deleteLesson(courseId: string, lessonId: string) {
+  if (!integrations.supabase) return;
+  const supabase = await createClient();
+  await supabase.from("lessons").delete().eq("id", lessonId);
   revalidateCourse(courseId);
 }

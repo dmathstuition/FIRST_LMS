@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { integrations } from "@/lib/env";
 import type { Category } from "@/types";
 import { setCourseStatus } from "../actions";
 import type { CourseDetail } from "../types";
@@ -85,12 +86,14 @@ export function CourseBuilderPanel({
                 categories={categories}
                 courseId={course.id}
                 basePath={basePath}
+                storageEnabled={integrations.supabase}
                 defaults={{
                   title: course.title,
                   subtitle: course.subtitle ?? "",
                   categoryId: course.category?.id,
                   level: course.level,
                   price: course.price,
+                  thumbnailUrl: course.thumbnailUrl ?? "",
                 }}
               />
             </CardContent>

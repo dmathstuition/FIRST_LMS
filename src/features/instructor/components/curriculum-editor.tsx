@@ -1,20 +1,12 @@
-import {
-  Plus,
-  Video,
-  FileText,
-  Eye,
-  GripVertical,
-  Layers,
-} from "lucide-react";
+import { Plus, GripVertical, Layers } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { formatDuration } from "@/lib/utils";
 import { integrations } from "@/lib/env";
-import { addSection, addLesson } from "../actions";
+import { addSection, addLesson, updateLesson, deleteLesson } from "../actions";
 import { AddLessonForm } from "./add-lesson-form";
+import { LessonRow } from "./lesson-row";
 import type { CurriculumSection } from "../types";
 
 /**
@@ -58,27 +50,15 @@ export function CurriculumEditor({
           {/* Lessons */}
           <ul className="divide-y">
             {section.lessons.map((lesson) => (
-              <li
+              <LessonRow
                 key={lesson.id}
-                className="flex items-center gap-3 px-4 py-3 text-sm"
-              >
-                {lesson.type === "video" ? (
-                  <Video className="size-4 text-primary" />
-                ) : (
-                  <FileText className="size-4 text-primary" />
-                )}
-                <span className="flex-1 truncate">{lesson.title}</span>
-                {lesson.isPreview && (
-                  <Badge variant="accent" className="gap-1">
-                    <Eye className="size-3" /> Preview
-                  </Badge>
-                )}
-                {lesson.durationMinutes > 0 && (
-                  <span className="text-xs text-muted-foreground">
-                    {formatDuration(lesson.durationMinutes)}
-                  </span>
-                )}
-              </li>
+                lesson={lesson}
+                courseId={courseId}
+                sectionId={section.id}
+                storageEnabled={integrations.supabase}
+                updateAction={updateLesson.bind(null, courseId, lesson.id)}
+                deleteAction={deleteLesson.bind(null, courseId, lesson.id)}
+              />
             ))}
           </ul>
 
