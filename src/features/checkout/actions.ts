@@ -7,6 +7,7 @@ import { getSessionUser } from "@/lib/auth";
 import { getCourseBySlug } from "@/features/courses/queries";
 import { getPaymentProvider } from "@/lib/payments";
 import { recordPurchaseAndEnroll } from "./service";
+import { applyCoupon } from "./coupons";
 
 async function siteOrigin() {
   const configured = process.env.NEXT_PUBLIC_SITE_URL;
@@ -25,7 +26,7 @@ async function siteOrigin() {
  * learner to the hosted payment page. Amounts are converted to kobo for
  * Paystack. Bound to a slug from the course page's <form action>.
  */
-export async function startCheckout(courseSlug: string) {
+export async function startCheckout(courseSlug: string, formData?: FormData) {
   const user = await getSessionUser();
   if (!user) {
     redirect(`/login?next=${encodeURIComponent(`/courses/${courseSlug}`)}`);
@@ -34,7 +35,12 @@ export async function startCheckout(courseSlug: string) {
   const course = await getCourseBySlug(courseSlug);
   if (!course) redirect("/courses");
 
-  const nairaPrice = course.discountPrice ?? course.price;
+  const listPrice = course.discountPrice ?? course.price;
+  // Apply a coupon code if one was entered (validated server-side).
+  const { price: nairaPrice } = await applyCoupon(
+    formData?.get("coupon") as string | null,
+    listPrice,
+  );
   const origin = await siteOrigin();
   const successUrl = `${origin}/checkout/callback?course=${encodeURIComponent(courseSlug)}`;
   const cancelUrl = `${origin}/courses/${encodeURIComponent(courseSlug)}`;

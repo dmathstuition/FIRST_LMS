@@ -233,7 +233,16 @@ export default async function CourseDetailPage({
                 </div>
 
                 <div className="mt-5 flex flex-col gap-2">
-                  <form action={startCheckout.bind(null, course.slug)}>
+                  <form
+                    action={startCheckout.bind(null, course.slug)}
+                    className="flex flex-col gap-2"
+                  >
+                    <input
+                      name="coupon"
+                      placeholder="Coupon code (optional)"
+                      aria-label="Coupon code"
+                      className="h-10 rounded-lg border border-input bg-background px-3 text-sm uppercase shadow-sm placeholder:normal-case focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    />
                     <Button
                       type="submit"
                       size="lg"

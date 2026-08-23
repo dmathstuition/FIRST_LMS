@@ -41,23 +41,32 @@ export async function getAdminStats(): Promise<AdminStats> {
   if (!integrations.supabase) return demoAdminStats;
   try {
     const supabase = await createClient();
-    const [students, instructors, courses, published, tickets] =
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const [students, instructors, courses, published, tickets, paidOrders, newUsers] =
       await Promise.all([
         supabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "student"),
         supabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "instructor"),
         supabase.from("courses").select("id", { count: "exact", head: true }),
         supabase.from("courses").select("id", { count: "exact", head: true }).eq("status", "published"),
         supabase.from("support_tickets").select("id", { count: "exact", head: true }).eq("status", "open"),
+        supabase.from("orders").select("total").eq("status", "paid"),
+        supabase.from("profiles").select("id", { count: "exact", head: true }).gte("created_at", startOfMonth.toISOString()),
       ]);
 
+    const paid = (paidOrders.data as { total: number }[] | null) ?? [];
+    const totalRevenue = paid.reduce((sum, o) => sum + Number(o.total), 0);
+
     return {
-      totalRevenue: 0,
-      totalSales: 0,
+      totalRevenue,
+      totalSales: paid.length,
       totalStudents: students.count ?? 0,
       totalInstructors: instructors.count ?? 0,
       totalCourses: courses.count ?? 0,
       publishedCourses: published.count ?? 0,
-      newUsersThisMonth: 0,
+      newUsersThisMonth: newUsers.count ?? 0,
       openTickets: tickets.count ?? 0,
     };
   } catch {
@@ -76,7 +85,43 @@ export async function getAdminStats(): Promise<AdminStats> {
 
 export async function getRevenueSeries(): Promise<SeriesPoint[]> {
   if (!integrations.supabase) return demoRevenueSeries;
-  return [];
+  try {
+    const supabase = await createClient();
+    // Last 6 months of paid revenue, bucketed by month.
+    const since = new Date();
+    since.setMonth(since.getMonth() - 5);
+    since.setDate(1);
+    since.setHours(0, 0, 0, 0);
+
+    const { data } = await supabase
+      .from("orders")
+      .select("total, created_at")
+      .eq("status", "paid")
+      .gte("created_at", since.toISOString());
+
+    const rows = (data as { total: number; created_at: string }[] | null) ?? [];
+
+    // Seed the 6 month buckets in order so empty months still render.
+    const buckets: { label: string; key: string; value: number }[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - i);
+      buckets.push({
+        label: d.toLocaleString("en-US", { month: "short" }),
+        key: `${d.getFullYear()}-${d.getMonth()}`,
+        value: 0,
+      });
+    }
+    for (const r of rows) {
+      const d = new Date(r.created_at);
+      const key = `${d.getFullYear()}-${d.getMonth()}`;
+      const bucket = buckets.find((b) => b.key === key);
+      if (bucket) bucket.value += Number(r.total);
+    }
+    return buckets.map(({ label, value }) => ({ label, value }));
+  } catch {
+    return [];
+  }
 }
 
 export async function getSignupSeries(): Promise<SeriesPoint[]> {
