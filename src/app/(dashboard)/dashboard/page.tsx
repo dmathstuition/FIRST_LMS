@@ -72,15 +72,16 @@ export default async function DashboardHomePage() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      {/* Greeting */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">
-          Welcome back, {firstName} 👋
+      {/* Hero greeting */}
+      <div className="surface-soft relative mb-6 overflow-hidden rounded-3xl border p-6 shadow-sm sm:p-8">
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          Welcome back,{" "}
+          <span className="text-gradient-multi">{firstName}</span> 👋
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-2 max-w-lg text-muted-foreground">
           {inProgress.length > 0
-            ? "Pick up right where you left off."
-            : "Ready to start learning something new?"}
+            ? "Pick up right where you left off — you're doing great."
+            : "Ready to start learning something new today?"}
         </p>
       </div>
 
@@ -90,7 +91,7 @@ export default async function DashboardHomePage() {
           icon={BookOpen}
           label="Enrolled courses"
           value={stats.coursesEnrolled}
-          accent="primary"
+          accent="accent"
         />
         <StatCard
           icon={CheckCircle2}
@@ -102,14 +103,14 @@ export default async function DashboardHomePage() {
           icon={Clock}
           label="Hours learned"
           value={stats.hoursLearned}
-          accent="accent"
+          accent="violet"
         />
         <StatCard
           icon={Flame}
           label="Day streak"
           value={stats.currentStreak}
           hint="Keep it going!"
-          accent="amber"
+          accent="sky"
         />
       </div>
 
