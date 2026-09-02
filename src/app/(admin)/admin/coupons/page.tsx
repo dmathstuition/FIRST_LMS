@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { requireRole } from "@/lib/auth";
 import { getCoupons } from "@/features/admin/queries";
+import { formatCurrency } from "@/lib/utils";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -58,7 +59,7 @@ export default async function AdminCouponsPage() {
                   <TableCell>
                     {c.discountType === "percent"
                       ? `${c.amount}%`
-                      : `$${c.amount}`}
+                      : formatCurrency(c.amount)}
                   </TableCell>
                   <TableCell className="hidden sm:table-cell text-muted-foreground">
                     {c.redemptions.toLocaleString()}

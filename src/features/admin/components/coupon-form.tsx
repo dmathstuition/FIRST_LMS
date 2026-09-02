@@ -36,7 +36,7 @@ export function CouponForm() {
             className="h-10 w-full rounded-lg border border-input bg-background px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <option value="percent">Percentage (%)</option>
-            <option value="fixed">Fixed amount ($)</option>
+            <option value="fixed">Fixed amount (₦)</option>
           </select>
         </div>
         <div className="space-y-2">

@@ -17,8 +17,10 @@ export async function recordPurchaseAndEnroll(opts: {
   courseTitle?: string;
   nairaAmount: number;
   reference: string;
-}): Promise<void> {
-  if (!integrations.supabase) return;
+}): Promise<{ created: boolean }> {
+  // Demo mode: nothing to persist. Report "created" so the mock flow still
+  // triggers the receipt email (which itself no-ops without Resend configured).
+  if (!integrations.supabase) return { created: true };
 
   try {
     const supabase = await createClient();
@@ -30,7 +32,16 @@ export async function recordPurchaseAndEnroll(opts: {
       .eq("reference", opts.reference)
       .maybeSingle();
 
-    if (!existing) {
+    if (existing) {
+      // Ensure enrollment even on a repeat call, but don't re-email.
+      await supabase.from("enrollments").upsert(
+        { user_id: opts.userId, course_id: opts.courseId, status: "active" },
+        { onConflict: "user_id,course_id", ignoreDuplicates: true },
+      );
+      return { created: false };
+    }
+
+    {
       const { data: order } = await supabase
         .from("orders")
         .insert({
@@ -69,7 +80,9 @@ export async function recordPurchaseAndEnroll(opts: {
       { user_id: opts.userId, course_id: opts.courseId, status: "active" },
       { onConflict: "user_id,course_id", ignoreDuplicates: true },
     );
+    return { created: true };
   } catch (error) {
     console.error("recordPurchaseAndEnroll failed:", error);
+    return { created: false };
   }
 }

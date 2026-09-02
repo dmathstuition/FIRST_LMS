@@ -82,7 +82,7 @@ export function CourseCard({
       {/* Body */}
       <div className="flex flex-1 flex-col p-5">
         {course.category && (
-          <span className="mb-1.5 text-xs font-medium text-primary">
+          <span className="mb-2 inline-flex w-fit rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
             {course.category.name}
           </span>
         )}
@@ -114,10 +114,10 @@ export function CourseCard({
 
         {/* Meta */}
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1 font-medium text-amber-500">
+          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 font-semibold text-amber-600 dark:text-amber-400">
             <Star className="size-3.5 fill-current" />
             {course.ratingAvg.toFixed(1)}
-            <span className="font-normal text-muted-foreground">
+            <span className="font-normal text-amber-600/70 dark:text-amber-400/70">
               ({formatCompact(course.ratingCount)})
             </span>
           </span>

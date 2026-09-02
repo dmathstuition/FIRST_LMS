@@ -9,6 +9,7 @@ import {
   PaystackProvider,
 } from "@/lib/payments";
 import { recordPurchaseAndEnroll } from "@/features/checkout/service";
+import { sendReceiptEmail } from "@/lib/email";
 import { Button } from "@/components/ui/button";
 
 export const metadata = { title: "Order confirmation" };
@@ -43,13 +44,25 @@ export default async function CheckoutCallbackPage({
   }
 
   if (success && user && course) {
-    await recordPurchaseAndEnroll({
+    const amount = course.discountPrice ?? course.price;
+    const ref = reference ?? `unknown_${Date.now()}`;
+    const { created } = await recordPurchaseAndEnroll({
       userId: user.id,
       courseId: course.id,
       courseTitle: course.title,
-      nairaAmount: course.discountPrice ?? course.price,
-      reference: reference ?? `unknown_${Date.now()}`,
+      nairaAmount: amount,
+      reference: ref,
     });
+    // Send a receipt only for a newly-recorded purchase (avoids duplicates on
+    // refresh). Best-effort — no-ops when Resend isn't configured.
+    if (created && user.email) {
+      await sendReceiptEmail({
+        to: user.email,
+        courseTitle: course.title,
+        amountNaira: amount,
+        reference: ref,
+      });
+    }
   }
 
   return (
