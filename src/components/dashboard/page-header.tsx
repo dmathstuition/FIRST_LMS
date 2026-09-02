@@ -19,7 +19,7 @@ export function PageHeader({
   const lead = words.join(" ");
 
   return (
-    <div className="surface-soft relative mb-6 flex flex-col gap-4 overflow-hidden rounded-3xl border p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-7">
+    <div className="surface-soft animate-fade-in relative mb-6 flex flex-col gap-4 overflow-hidden rounded-3xl border p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-7">
       <div>
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
           {lead && <span>{lead} </span>}

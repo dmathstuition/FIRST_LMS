@@ -73,7 +73,7 @@ export default async function DashboardHomePage() {
   return (
     <div className="mx-auto max-w-6xl">
       {/* Hero greeting */}
-      <div className="surface-soft relative mb-6 overflow-hidden rounded-3xl border p-6 shadow-sm sm:p-8">
+      <div className="surface-soft animate-fade-in relative mb-6 overflow-hidden rounded-3xl border p-6 shadow-sm sm:p-8">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
           Welcome back,{" "}
           <span className="text-gradient-multi">{firstName}</span> 👋

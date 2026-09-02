@@ -18,9 +18,9 @@ export function EmptyState({
   actionHref?: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed p-12 text-center">
-      <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-        <Icon className="size-7" />
+    <div className="surface-soft flex flex-col items-center justify-center rounded-3xl border border-dashed p-12 text-center">
+      <span className="flex size-16 items-center justify-center rounded-2xl bg-brand-gradient text-white shadow-lg shadow-primary/20">
+        <Icon className="size-8" />
       </span>
       <h3 className="mt-4 font-semibold">{title}</h3>
       <p className="mt-1 max-w-sm text-sm text-muted-foreground">{description}</p>

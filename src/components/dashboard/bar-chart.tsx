@@ -32,17 +32,23 @@ export function BarChart({
     <figure className={cn("w-full", className)}>
       {/* Bars track — fixed height so percentage bar heights resolve. */}
       <div className="flex h-44 items-end gap-2 sm:gap-3">
-        {data.map((point) => {
+        {data.map((point, i) => {
           const heightPct = Math.max(4, (point.value / max) * 100);
+          const isLatest = i === data.length - 1;
           return (
             <div
               key={point.label}
-              className="h-full flex-1"
+              className="group h-full flex-1"
               title={`${point.label}: ${valuePrefix}${point.value.toLocaleString()}`}
             >
               <div className="flex h-full items-end">
                 <div
-                  className="w-full rounded-t-md bg-brand-gradient transition-all"
+                  className={cn(
+                    "w-full rounded-t-lg transition-all duration-300 group-hover:brightness-110",
+                    isLatest
+                      ? "bg-gradient-to-t from-accent to-amber-300 shadow-sm shadow-accent/30"
+                      : "bg-gradient-to-t from-primary to-violet-400",
+                  )}
                   style={{ height: `${heightPct}%` }}
                 />
               </div>

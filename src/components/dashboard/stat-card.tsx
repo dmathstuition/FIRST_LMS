@@ -40,7 +40,7 @@ export function StatCard({
   };
 
   return (
-    <Card className="rounded-2xl p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+    <Card className="animate-fade-in rounded-2xl p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
       <div className="flex items-center gap-4">
         <span
           className={cn(
