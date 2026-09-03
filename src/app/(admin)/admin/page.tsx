@@ -70,7 +70,6 @@ export default async function AdminDashboardPage() {
           icon={Users}
           label="Students"
           value={formatCompact(stats.totalStudents)}
-          hint={`${formatCompact(stats.totalInstructors)} instructors`}
           accent="accent"
         />
         <StatCard
@@ -88,7 +87,7 @@ export default async function AdminDashboardPage() {
             <CardTitle className="text-base">Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <BarChart data={revenue} valuePrefix="$" />
+            <BarChart data={revenue} valuePrefix="₦" />
           </CardContent>
         </Card>
         <Card>

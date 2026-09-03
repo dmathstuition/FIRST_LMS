@@ -39,7 +39,6 @@ export function UserRoleSelect({
         )}
       >
         <option value="student">Student</option>
-        <option value="instructor">Instructor</option>
         <option value="admin">Admin</option>
       </select>
       {pending && <Loader2 className="size-3.5 animate-spin text-muted-foreground" />}

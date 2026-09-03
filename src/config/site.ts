@@ -62,7 +62,7 @@ export const footerNav = [
   {
     title: "Company",
     links: [
-      { title: "About", href: "/#instructor" },
+      { title: "About", href: "/#founder" },
       { title: "Blog", href: "/blog" },
       { title: "Testimonials", href: "/#testimonials" },
       { title: "FAQ", href: "/#faq" },

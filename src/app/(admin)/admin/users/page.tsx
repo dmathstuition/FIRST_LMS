@@ -26,7 +26,7 @@ export default async function AdminUsersPage() {
     <div className="mx-auto max-w-6xl">
       <PageHeader
         title="Users"
-        description={`${users.length} registered users. Change a role to grant instructor or admin access.`}
+        description={`${users.length} registered users. Everyone signs up as a student; grant admin only to yourself.`}
       />
 
       <Card className="overflow-hidden">

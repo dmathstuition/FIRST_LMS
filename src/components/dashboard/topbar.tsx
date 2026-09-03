@@ -9,7 +9,6 @@ import {
   LogOut,
   User,
   Settings,
-  GraduationCap,
   Shield,
 } from "lucide-react";
 
@@ -143,13 +142,6 @@ export function Topbar({
               </Badge>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {(user.role === "instructor" || user.role === "admin") && (
-              <DropdownMenuItem asChild>
-                <Link href="/instructor">
-                  <GraduationCap /> Instructor panel
-                </Link>
-              </DropdownMenuItem>
-            )}
             {user.role === "admin" && (
               <DropdownMenuItem asChild>
                 <Link href="/admin">

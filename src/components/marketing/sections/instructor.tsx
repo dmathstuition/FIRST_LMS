@@ -21,7 +21,7 @@ import { Badge } from "@/components/ui/badge";
  */
 export function Instructor() {
   return (
-    <section id="instructor" className="border-y bg-muted/30 py-20 sm:py-28">
+    <section id="founder" className="border-y bg-muted/30 py-20 sm:py-28">
       <div className="container grid items-center gap-12 lg:grid-cols-2">
         <Reveal className="order-2 lg:order-1">
           <span className="inline-flex items-center gap-2 rounded-full border bg-card/60 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary shadow-sm backdrop-blur">

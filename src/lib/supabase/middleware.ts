@@ -22,7 +22,6 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isProtected =
     pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/instructor") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/learn");
 
@@ -91,11 +90,9 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Role gating for elevated areas (defense-in-depth; RLS is the real guard).
-  if (
-    user &&
-    (pathname.startsWith("/admin") || pathname.startsWith("/instructor"))
-  ) {
+  // Admin gating (defense-in-depth; RLS is the real guard). D-MATHS is the only
+  // admin — everyone else is a student and is bounced back to their dashboard.
+  if (user && pathname.startsWith("/admin")) {
     let role = "student";
     try {
       const { data: profile } = await supabase
@@ -108,16 +105,7 @@ export async function updateSession(request: NextRequest) {
       role = "student";
     }
 
-    if (pathname.startsWith("/admin") && role !== "admin") {
-      const url = request.nextUrl.clone();
-      url.pathname = "/dashboard";
-      return NextResponse.redirect(url);
-    }
-    if (
-      pathname.startsWith("/instructor") &&
-      role !== "instructor" &&
-      role !== "admin"
-    ) {
+    if (role !== "admin") {
       const url = request.nextUrl.clone();
       url.pathname = "/dashboard";
       return NextResponse.redirect(url);

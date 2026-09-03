@@ -10,11 +10,10 @@ import {
   browseCoursesLink,
   type DashboardNavItem,
 } from "@/config/dashboard";
-import { instructorNav, switchToLearningLink } from "@/config/instructor";
 import { adminNav, adminFooterLink } from "@/config/admin";
 import { cn } from "@/lib/utils";
 
-export type DashboardVariant = "student" | "instructor" | "admin";
+export type DashboardVariant = "student" | "admin";
 
 /**
  * Resolve nav + footer link for a variant.
@@ -26,8 +25,6 @@ export type DashboardVariant = "student" | "instructor" | "admin";
  */
 function resolveNav(variant: DashboardVariant) {
   switch (variant) {
-    case "instructor":
-      return { nav: instructorNav, footerLink: switchToLearningLink };
     case "admin":
       return { nav: adminNav, footerLink: adminFooterLink };
     default:
@@ -42,8 +39,8 @@ function isActive(pathname: string, item: DashboardNavItem) {
 
 /**
  * Generic dashboard sidebar contents (nav groups + a highlighted footer link).
- * Rendered in the fixed desktop rail and inside the mobile drawer, for both the
- * student and instructor areas — selected by the `variant` prop.
+ * Rendered in the fixed desktop rail and inside the mobile drawer, for the
+ * student and admin areas — selected by the `variant` prop.
  */
 export function SidebarContent({
   variant,

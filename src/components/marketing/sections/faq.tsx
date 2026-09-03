@@ -35,9 +35,9 @@ const faqs: FaqItem[] = [
       "Every lesson has a discussion section and Q&A. Pro members also get an AI tutor available 24/7 and priority human support.",
   },
   {
-    question: "Can I become an instructor?",
+    question: "Who teaches the courses?",
     answer:
-      "Yes! Sign up as an instructor to create courses, upload lessons, build quizzes, and earn from your expertise. Our instructor tools make it easy.",
+      "Every course is created and taught by D-MATHS — a Web Developer, Data Analyst, and AI Engineer — so the teaching, quality, and support all come from one trusted source.",
   },
 ];
 
