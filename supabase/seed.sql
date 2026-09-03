@@ -54,8 +54,11 @@ insert into auth.identities (
 on conflict (provider_id, provider) do nothing;
 
 -- Enrich the auto-created profile + instructor profile.
+-- D-MATHS is the sole owner: role = admin (admins can also author courses under
+-- RLS), so this one account controls the whole platform.
 update public.profiles
-set headline = 'Founder • Web Developer, Data Analyst & AI Engineer',
+set role = 'admin',
+    headline = 'Founder • Web Developer, Data Analyst & AI Engineer',
     bio = 'The visionary behind D-MATHS — a passionate educator and technology professional dedicated to transforming education through innovation. He combines web development, data analysis, and AI to make learning practical, engaging, and impactful.',
     avatar_url = '/founder.jpg',
     country = 'NG'

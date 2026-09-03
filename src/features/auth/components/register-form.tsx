@@ -1,54 +1,23 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/submit-button";
-import { cn } from "@/lib/utils";
 import { signUp, type AuthActionResult } from "../actions";
 import { AuthError } from "./auth-error";
 
-/** Registration form with role selection (student / instructor). */
-export function RegisterForm({
-  defaultRole = "student",
-}: {
-  defaultRole?: "student" | "instructor";
-}) {
+/** Learner registration form (D-MATHS is the only tutor; all signups are students). */
+export function RegisterForm() {
   const [state, formAction] = useActionState<AuthActionResult, FormData>(
     signUp,
     undefined,
   );
-  const [role, setRole] = useState<"student" | "instructor">(defaultRole);
 
   return (
     <form action={formAction} className="space-y-4">
       <AuthError error={state?.error} />
-
-      {/* Role selector */}
-      <input type="hidden" name="role" value={role} />
-      <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Account type">
-        {(["student", "instructor"] as const).map((r) => (
-          <button
-            key={r}
-            type="button"
-            role="radio"
-            aria-checked={role === r}
-            onClick={() => setRole(r)}
-            className={cn(
-              "rounded-xl border p-3 text-left text-sm capitalize transition-all",
-              role === r
-                ? "border-primary bg-primary/5 ring-1 ring-primary"
-                : "hover:border-primary/40",
-            )}
-          >
-            <span className="font-medium">{r}</span>
-            <span className="mt-0.5 block text-xs text-muted-foreground">
-              {r === "student" ? "Learn new skills" : "Teach & earn"}
-            </span>
-          </button>
-        ))}
-      </div>
 
       <div className="space-y-2">
         <Label htmlFor="fullName">Full name</Label>

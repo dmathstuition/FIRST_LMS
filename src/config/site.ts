@@ -56,7 +56,6 @@ export const footerNav = [
     links: [
       { title: "Browse Courses", href: "/courses" },
       { title: "Pricing", href: "/#pricing" },
-      { title: "Become an Instructor", href: "/register?role=instructor" },
       { title: "Certificate Verification", href: "/verify" },
     ],
   },

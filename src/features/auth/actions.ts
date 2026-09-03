@@ -99,7 +99,6 @@ export async function signUp(
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
-    role: formData.get("role") ?? "student",
   });
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
@@ -111,8 +110,10 @@ export async function signUp(
     email: parsed.data.email,
     password: parsed.data.password,
     options: {
-      // Metadata consumed by the handle_new_user() DB trigger to build the profile.
-      data: { full_name: parsed.data.fullName, role: parsed.data.role },
+      // Metadata consumed by the handle_new_user() DB trigger. This is a
+      // single-tutor platform: every self-signup is a student. The trigger also
+      // enforces this server-side, so role is never taken from the client.
+      data: { full_name: parsed.data.fullName },
       emailRedirectTo: `${origin}/auth/callback?next=/dashboard`,
     },
   });

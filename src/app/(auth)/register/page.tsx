@@ -10,14 +10,7 @@ export const metadata: Metadata = {
   description: "Join D-MATHS Learning Hub and start learning today.",
 };
 
-export default async function RegisterPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ role?: string }>;
-}) {
-  const { role } = await searchParams;
-  const defaultRole = role === "instructor" ? "instructor" : "student";
-
+export default async function RegisterPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -37,7 +30,7 @@ export default async function RegisterPage({
         <Separator className="flex-1" />
       </div>
 
-      <RegisterForm defaultRole={defaultRole} />
+      <RegisterForm />
 
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
