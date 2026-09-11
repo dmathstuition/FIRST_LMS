@@ -15,6 +15,9 @@ import {
 } from "lucide-react";
 
 import { getCourseBySlug, getPublishedCourses } from "@/features/courses/queries";
+import { getCourseReviews, getReviewContext } from "@/features/reviews/queries";
+import { ReviewForm } from "@/features/reviews/components/review-form";
+import { ReviewList } from "@/features/reviews/components/review-list";
 import { startCheckout } from "@/features/checkout/actions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -69,6 +72,11 @@ export default async function CourseDetailPage({
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
   if (!course) notFound();
+
+  const [reviews, reviewContext] = await Promise.all([
+    getCourseReviews(course.id),
+    getReviewContext(course.id),
+  ]);
 
   const price = course.discountPrice ?? course.price;
   const hasDiscount =
@@ -197,6 +205,46 @@ export default async function CourseDetailPage({
               </div>
             </section>
           )}
+
+          {/* Reviews */}
+          <section id="reviews">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-xl font-semibold">Student reviews</h2>
+              <div className="flex items-center gap-1.5 text-sm">
+                <Star className="size-4 fill-amber-400 text-amber-400" />
+                <span className="font-semibold">
+                  {course.ratingAvg.toFixed(1)}
+                </span>
+                <span className="text-muted-foreground">
+                  · {formatCompact(course.ratingCount)} rating
+                  {course.ratingCount === 1 ? "" : "s"}
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-6">
+              {reviewContext.canReview ? (
+                <ReviewForm
+                  courseId={course.id}
+                  courseSlug={course.slug}
+                  existing={reviewContext.existing}
+                />
+              ) : reviewContext.signedIn ? (
+                <p className="rounded-2xl border border-dashed bg-muted/30 p-4 text-sm text-muted-foreground">
+                  Enrol in this course to leave a review.
+                </p>
+              ) : (
+                <p className="rounded-2xl border border-dashed bg-muted/30 p-4 text-sm text-muted-foreground">
+                  <Link href={`/login?next=/courses/${course.slug}`} className="font-medium text-primary hover:underline">
+                    Sign in
+                  </Link>{" "}
+                  and enrol to leave a review.
+                </p>
+              )}
+
+              <ReviewList reviews={reviews} />
+            </div>
+          </section>
         </div>
 
         {/* Sticky purchase card */}
