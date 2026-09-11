@@ -28,8 +28,8 @@ const postSchema = z.object({
     .max(160)
     .optional()
     .or(z.literal("")),
-  excerpt: z.string().max(300).optional().or(z.literal("")),
-  content: z.string().max(50_000).optional().or(z.literal("")),
+  excerpt: z.string().max(2_000).optional().or(z.literal("")),
+  content: z.string().max(500_000).optional().or(z.literal("")),
   coverUrl: z.string().url("Cover must be a valid URL").optional().or(z.literal("")),
   tags: z.string().max(300).optional().or(z.literal("")),
   published: z.coerce.boolean().optional(),
