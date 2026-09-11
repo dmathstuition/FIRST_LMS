@@ -12,6 +12,7 @@ import {
   LineChart,
   Newspaper,
   Megaphone,
+  Rocket,
 } from "lucide-react";
 
 import type { DashboardNavGroup, DashboardNavItem } from "./dashboard";
@@ -28,6 +29,7 @@ export const adminNav: DashboardNavGroup[] = [
     heading: "Content",
     items: [
       { title: "Courses", href: "/admin/courses", icon: BookOpen },
+      { title: "Programs", href: "/admin/programs", icon: Rocket },
       { title: "Categories", href: "/admin/categories", icon: FolderTree },
       { title: "Blog", href: "/admin/blog", icon: Newspaper },
       { title: "Student Progress", href: "/admin/students", icon: LineChart },

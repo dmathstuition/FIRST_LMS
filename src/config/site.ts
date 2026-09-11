@@ -43,7 +43,7 @@ export type SiteConfig = typeof siteConfig;
 /** Primary marketing navigation. */
 export const marketingNav = [
   { title: "Courses", href: "/courses" },
-  { title: "Categories", href: "/#categories" },
+  { title: "Programs", href: "/programs" },
   { title: "Pricing", href: "/#pricing" },
   { title: "Blog", href: "/blog" },
   { title: "Verify Certificate", href: "/verify" },
@@ -55,6 +55,7 @@ export const footerNav = [
     title: "Platform",
     links: [
       { title: "Browse Courses", href: "/courses" },
+      { title: "Programs & Cohorts", href: "/programs" },
       { title: "Pricing", href: "/#pricing" },
       { title: "Certificate Verification", href: "/verify" },
     ],
