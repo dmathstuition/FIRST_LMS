@@ -10,6 +10,7 @@ import {
   Settings,
   Compass,
   LineChart,
+  Newspaper,
 } from "lucide-react";
 
 import type { DashboardNavGroup, DashboardNavItem } from "./dashboard";
@@ -27,6 +28,7 @@ export const adminNav: DashboardNavGroup[] = [
     items: [
       { title: "Courses", href: "/admin/courses", icon: BookOpen },
       { title: "Categories", href: "/admin/categories", icon: FolderTree },
+      { title: "Blog", href: "/admin/blog", icon: Newspaper },
       { title: "Student Progress", href: "/admin/students", icon: LineChart },
     ],
   },

@@ -126,10 +126,21 @@ export function Catalog({
         </div>
       ) : (
         <div className="mt-10 rounded-2xl border border-dashed p-12 text-center">
-          <p className="font-medium">No courses match your search</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Try a different keyword or category.
-          </p>
+          {courses.length === 0 ? (
+            <>
+              <p className="font-medium">No courses published yet</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Our catalogue is on its way — check back soon for new courses.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="font-medium">No courses match your search</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Try a different keyword or category.
+              </p>
+            </>
+          )}
         </div>
       )}
     </div>

@@ -23,21 +23,36 @@ export async function FeaturedCourses() {
           subtitle="Hand-picked, top-rated courses to jump-start your journey."
         />
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {courses.map((course, i) => (
-            <Reveal key={course.id} delay={i * 0.06}>
-              <CourseCard course={course} className="h-full" />
-            </Reveal>
-          ))}
-        </div>
+        {courses.length === 0 ? (
+          <div className="surface-soft mt-12 rounded-3xl border border-dashed p-12 text-center">
+            <h3 className="font-semibold">New courses are on the way</h3>
+            <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
+              We&apos;re preparing something great. Check back soon, or create an
+              account to be the first to know when courses launch.
+            </p>
+            <Button asChild variant="gradient" className="mt-6">
+              <Link href="/register">Create a free account</Link>
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {courses.map((course, i) => (
+                <Reveal key={course.id} delay={i * 0.06}>
+                  <CourseCard course={course} className="h-full" />
+                </Reveal>
+              ))}
+            </div>
 
-        <div className="mt-12 flex justify-center">
-          <Button asChild size="lg" variant="outline">
-            <Link href="/courses">
-              Browse all courses <ArrowRight className="size-4" />
-            </Link>
-          </Button>
-        </div>
+            <div className="mt-12 flex justify-center">
+              <Button asChild size="lg" variant="outline">
+                <Link href="/courses">
+                  Browse all courses <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

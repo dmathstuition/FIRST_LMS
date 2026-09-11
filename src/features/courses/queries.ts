@@ -8,10 +8,13 @@ import { demoCategories, demoCourses } from "./demo-data";
 /**
  * Public catalog queries.
  *
- * When a real Supabase project is configured we read live data; otherwise we
- * return the curated demo dataset (mirrors seed.sql) so the marketing site is
- * fully populated out of the box. Any query error also degrades to demo data so
- * the landing page can never render empty.
+ * Behaviour is deliberately split:
+ *   • No Supabase configured (local preview / marketing demo) → serve the
+ *     curated demo dataset so the site is never blank out of the box.
+ *   • Supabase configured (the real platform) → serve ONLY live data. An empty
+ *     catalog returns an empty list so D-MATHS can build the catalogue from
+ *     scratch; we never inject demo courses into the live site. A transient
+ *     query error also returns empty rather than fake data.
  */
 
 type CourseRow = {
@@ -90,12 +93,10 @@ export async function getFeaturedCourses(limit = 4): Promise<CourseCard[]> {
       .order("student_count", { ascending: false })
       .limit(limit);
 
-    if (error || !data?.length) {
-      return demoCourses.filter((c) => c.isFeatured).slice(0, limit);
-    }
+    if (error || !data) return [];
     return (data as unknown as CourseRow[]).map(mapCourse);
   } catch {
-    return demoCourses.filter((c) => c.isFeatured).slice(0, limit);
+    return [];
   }
 }
 
@@ -111,10 +112,10 @@ export async function getPublishedCourses(): Promise<CourseCard[]> {
       .eq("status", "published")
       .order("created_at", { ascending: false });
 
-    if (error || !data?.length) return demoCourses;
+    if (error || !data) return [];
     return (data as unknown as CourseRow[]).map(mapCourse);
   } catch {
-    return demoCourses;
+    return [];
   }
 }
 
@@ -133,12 +134,10 @@ export async function getCourseBySlug(slug: string): Promise<CourseCard | null> 
       .eq("status", "published")
       .maybeSingle();
 
-    if (error || !data) {
-      return demoCourses.find((c) => c.slug === slug) ?? null;
-    }
+    if (error || !data) return null;
     return mapCourse(data as unknown as CourseRow);
   } catch {
-    return demoCourses.find((c) => c.slug === slug) ?? null;
+    return null;
   }
 }
 
@@ -153,9 +152,9 @@ export async function getCategories(): Promise<Category[]> {
       .select("id, name, slug, description, icon")
       .order("sort_order", { ascending: true });
 
-    if (error || !data?.length) return demoCategories;
+    if (error || !data) return [];
     return data as Category[];
   } catch {
-    return demoCategories;
+    return [];
   }
 }
