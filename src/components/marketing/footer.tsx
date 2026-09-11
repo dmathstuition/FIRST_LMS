@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Twitter, Github, Youtube, Linkedin } from "lucide-react";
 
 import { siteConfig, footerNav } from "@/config/site";
+import { NewsletterForm } from "@/features/announcements/components/newsletter-form";
 
 /** Site footer with link groups + social icons. Server-rendered. */
 export function Footer() {
@@ -38,6 +39,16 @@ export function Footer() {
               <SocialLink href={siteConfig.links.linkedin} label="LinkedIn">
                 <Linkedin className="size-4" />
               </SocialLink>
+            </div>
+
+            <div className="mt-6 max-w-sm">
+              <p className="text-sm font-semibold">Stay in the loop</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                New courses, programs and learning tips — straight to your inbox.
+              </p>
+              <div className="mt-3">
+                <NewsletterForm />
+              </div>
             </div>
           </div>
 

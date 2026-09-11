@@ -14,6 +14,7 @@ import {
   Target,
   Rocket,
   Moon,
+  Megaphone,
   type LucideIcon,
 } from "lucide-react";
 
@@ -24,6 +25,7 @@ import {
   getRecentActivity,
   getBadges,
 } from "@/features/dashboard/queries";
+import { getAnnouncements } from "@/features/announcements/queries";
 import { EnrolledCourseCard } from "@/components/dashboard/enrolled-course-card";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { EmptyState } from "@/components/dashboard/empty-state";
@@ -55,11 +57,12 @@ const activityIcons: Record<string, LucideIcon> = {
 
 export default async function DashboardHomePage() {
   const user = await requireUser();
-  const [stats, enrolled, activity, badges] = await Promise.all([
+  const [stats, enrolled, activity, badges, announcements] = await Promise.all([
     getStudentStats(user.id),
     getEnrolledCourses(user.id),
     getRecentActivity(user.id),
     getBadges(user.id),
+    getAnnouncements(3),
   ]);
 
   const inProgress = enrolled.filter((c) => c.status === "active");
@@ -183,8 +186,37 @@ export default async function DashboardHomePage() {
           )}
         </div>
 
-        {/* Sidebar column: XP + goal + activity + badges */}
+        {/* Sidebar column: announcements + XP + goal + activity + badges */}
         <div className="space-y-6">
+          {/* Announcements */}
+          {announcements.length > 0 && (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Megaphone className="size-4 text-primary" /> Announcements
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-4">
+                  {announcements.map((a) => (
+                    <li key={a.id}>
+                      <p className="text-sm font-medium">{a.title}</p>
+                      <p className="mt-0.5 line-clamp-3 text-sm text-muted-foreground">
+                        {a.body}
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {new Date(a.createdAt).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+
           {/* XP + weekly goal */}
           <Card>
             <CardHeader className="pb-3">

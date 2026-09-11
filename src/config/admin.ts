@@ -11,6 +11,7 @@ import {
   Compass,
   LineChart,
   Newspaper,
+  Megaphone,
 } from "lucide-react";
 
 import type { DashboardNavGroup, DashboardNavItem } from "./dashboard";
@@ -43,6 +44,7 @@ export const adminNav: DashboardNavGroup[] = [
   {
     heading: "Operations",
     items: [
+      { title: "Announcements", href: "/admin/announcements", icon: Megaphone },
       { title: "Support Tickets", href: "/admin/tickets", icon: LifeBuoy },
       { title: "Audit Logs", href: "/admin/audit", icon: ScrollText },
       { title: "Settings", href: "/admin/settings", icon: Settings },
